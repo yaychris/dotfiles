@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+# from http://errtheblog.com/posts/89-huba-huba
+
+home = File.expand_path('~')
+
+Dir.glob('*', File::FNM_DOTMATCH).each do |file|
+  # ignore installer and this/parent directories
+  next if file =~ /install|\.{1,2}$/
+
+  target = File.join(home, "#{file}")
+  `ln -s #{File.expand_path file} #{target}`
+
+  puts "-> linked #{file} to #{target}"
+end
+
+# git push on commit
+`echo 'git push' > .git/hooks/post-commit`
+`chmod 755 .git/hooks/post-commit`
