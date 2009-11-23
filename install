@@ -6,7 +6,7 @@ home = File.expand_path('~')
 
 Dir.glob('*', File::FNM_DOTMATCH).each do |file|
   # ignore installer and this/parent directories
-  next if file =~ /install|\.{1,2}$/
+  next if file =~ /install|\.{1,2}(git)?$/
 
   target = File.join(home, "#{file}")
 
