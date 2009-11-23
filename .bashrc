@@ -19,7 +19,7 @@ export PATH="./:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 alias lal="ls -AlF"
 alias cl="clear"
 alias yay="ssh yay"
-alias basrc="vim ~/.bashrc && source ~/.bash_profile"
+alias bashrc="vim ~/.bashrc && source ~/.bash_profile"
 alias httpd-restart="sudo /opt/local/apache2/bin/apachectl restart"
 alias fn="find . -name"
 
