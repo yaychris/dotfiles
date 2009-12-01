@@ -1,7 +1,7 @@
 ###
 # Aliases
 if [ "$(uname)" = Darwin ]; then
-  alias lal="ls -AlF"
+  alias lal="ls -AlFG"
 else
   alias lal="ls -AlF --color=auto"
 fi

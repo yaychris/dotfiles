@@ -1,7 +1,6 @@
 ###
 # ENV
 export EDITOR=vim
-export CLICOLOR=1
 
 ## Go
 export GOROOT="/Users/Chris/code/go"
