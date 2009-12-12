@@ -1,13 +1,15 @@
 ###
 # Aliases
 if [ "$(uname)" = Darwin ]; then
+  # OS X
   alias lal="ls -AlFG"
+  alias chromium-gl="/Applications/Chromium.app/Contents/MacOS/Chromium --no-sandbox --enable-webgl &"
 else
+  # others
   alias lal="ls -AlF --color=auto"
 fi
 
 alias cl="clear"
-alias httpd-restart="sudo /opt/local/apache2/bin/apachectl restart"
 alias fn="find . -name"
 
 ## Git
