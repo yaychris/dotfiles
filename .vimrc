@@ -36,9 +36,7 @@ map <leader>l <C-w>l
 map <S-Enter> O<ESC>
 map <Enter> o<ESC>
 
-
-" colorscheme twilight
-colorscheme vividchalk
+colorscheme inkpot
 
 autocmd BufRead *.css.php set filetype=css
 autocmd BufRead *.js.php	set filetype=javascript
