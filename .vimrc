@@ -26,8 +26,15 @@ filetype indent on
 
 nnoremap <leader>t :NERDTreeToggle<CR>
 
-map <leader>f :FuzzyFinderFile<CR>
-map <leader>b :FuzzyFinderBuffer<CR>
+" http://intraspirit.net/scratchpad/a-simple-fuzzyfinder-improvement/
+map <leader>f :FufFile<CR>
+map <leader>/ :FufFileRecursive<CR>
+map <leader>F :FufFileWithCurrentBufferDir<CR>
+map <leader>d :FufDir<CR>
+map <leader>b :FufBuffer<CR>
+" map <leader>f :FuzzyFinderFile<CR>
+" map <leader>b :FuzzyFinderBuffer<CR>
+
 let g:fuzzy_ignore = "*.log"
 
 map <leader>h <C-w>h
