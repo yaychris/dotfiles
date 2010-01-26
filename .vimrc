@@ -17,7 +17,7 @@ set encoding=utf-8
 let mapleader = ","
 
 " Set the default font
-set guifont=Monaco:h15
+set guifont=Monaco:h13
 
 " File-type highlighting and configuration
 syntax on
@@ -36,8 +36,9 @@ map <leader>l <C-w>l
 map <S-Enter> O<ESC>
 map <Enter> o<ESC>
 
-colorscheme inkpot
+colorscheme vividchalk
 
+" EE 1.x uses stupid extensions for its templates
 autocmd BufRead *.css.php set filetype=css
 autocmd BufRead *.js.php	set filetype=javascript
 
