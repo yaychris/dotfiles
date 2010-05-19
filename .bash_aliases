@@ -16,8 +16,10 @@ alias fn="find . -name"
 alias gcav="git commit -av"
 alias gst="git status"
 alias gb="git branch"
+alias gba="git branch -a"
 alias gco="git checkout"
 alias gai="git add -i"
+alias amend="git commit --amend"
 
 ## Ruby
 alias ss="script/server"
@@ -31,3 +33,8 @@ alias rta="rake test:all"
 alias rc="rake cucumber"
 alias rdb="rake db:blast"
 alias rdm="rake db:migrate"
+
+## Make
+alias m="make"
+alias mr="make rebuild"
+alias mc="make clean"

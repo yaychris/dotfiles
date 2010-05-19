@@ -11,7 +11,7 @@ export GOBIN="/Users/Chris/code/go/bin"
 export PATH="$GOBIN:$PATH"
 
 ## Path
-export PATH="./:/opt/ruby-enterprise-1.8.7-2009.10/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+export PATH="./:/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 
 ###

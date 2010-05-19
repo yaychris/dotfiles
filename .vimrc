@@ -64,5 +64,3 @@ if has("gui_running")
   set guioptions=egmrt
   set fuoptions=maxvert,maxhorz
 endif
-
-
