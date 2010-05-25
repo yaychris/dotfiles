@@ -14,11 +14,13 @@ alias fn="find . -name"
 
 ## Git
 alias gcav="git commit -av"
+alias gcv="git commit -v"
 alias gst="git status"
 alias gb="git branch"
 alias gba="git branch -a"
 alias gco="git checkout"
 alias gai="git add -i"
+alias gap="git add --patch"
 alias amend="git commit --amend"
 
 ## Ruby
