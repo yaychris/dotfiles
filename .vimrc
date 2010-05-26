@@ -13,7 +13,7 @@ set visualbell
 
 set encoding=utf-8
 
-"Customize mapleader
+" Customize mapleader
 let mapleader = ","
 
 " Set the default font
@@ -32,8 +32,6 @@ map <leader>/ :FufFileRecursive<CR>
 map <leader>F :FufFileWithCurrentBufferDir<CR>
 map <leader>d :FufDir<CR>
 map <leader>b :FufBuffer<CR>
-" map <leader>f :FuzzyFinderFile<CR>
-" map <leader>b :FuzzyFinderBuffer<CR>
 
 let g:fuzzy_ignore = "*.log"
 
@@ -50,7 +48,6 @@ autocmd BufRead *.css.php set filetype=css
 autocmd BufRead *.js.php	set filetype=javascript
 
 " runtime macros/matchit.vim
-
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
