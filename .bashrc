@@ -3,6 +3,8 @@
 export EDITOR=vim
 export PAGER=less
 
+set -o vi
+
 ## Go
 export GOROOT="/Users/Chris/code/go"
 export GOOS="darwin"
