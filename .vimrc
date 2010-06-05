@@ -31,7 +31,7 @@ set scrolloff=3 " buffer around window
 set showcmd " show commands as they're typed
 set showmode " display the current mode
 
-set wildmenu " fancy command line completion menu
+" set wildmenu " fancy command line completion menu
 set wildmode=list:longest " complete files like a shell
 set wildignore=*.log,*.o,*.ss~ " files to ignore
 
@@ -42,9 +42,12 @@ set listchars=tab:▸\ ,eol:¬
 let mapleader = ","
 map <leader>i :set list!<CR>
 map <leader>t :NERDTreeToggle<CR>
-map <leader>f :LustyFilesystemExplorer<CR>
-map <leader>F :LustyFilesystemExplorerFromHere<CR>
-map <leader>b :LustyBufferExplorer<CR>
+" map <leader>f :LustyFilesystemExplorer<CR>
+map <leader>f :FufFile<CR>
+" map <leader>F :LustyFilesystemExplorerFromHere<CR>
+map <leader>F :FufFileWithCurrentBufferDir<CR>
+" map <leader>b :LustyBufferExplorer<CR>
+map <leader>b :FufBuffer<CR>
 " fuzzy finder recursive (until lusty catches up)
 map <leader>/ :FufFileRecursive<CR>
 
@@ -63,7 +66,7 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set ruler
 set rulerformat=%25(%n%m%r:\ %Y\ [%l,%v]\ %p%%%)
 
-colorscheme vividchalk
+colorscheme oceandeep
 
 " GUI prefs
 if has("gui_running")
@@ -79,6 +82,7 @@ if has("gui_running")
   set guifont=Monaco:h13
 
   " set guioptions=egmrt
+  set go-=r
 
   set lines=999 columns=80
 
