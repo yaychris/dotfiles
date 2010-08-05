@@ -1,3 +1,5 @@
+set exrc " needed to make vroom work
+
 set nocompatible
 
 set encoding=utf-8 " one encoding to rule them all
@@ -33,7 +35,7 @@ set showmode " display the current mode
 
 " set wildmenu " fancy command line completion menu
 set wildmode=list:longest " complete files like a shell
-set wildignore=*.log,*.o,*.ss~ " files to ignore
+set wildignore=*.DS_Store,*.dSYM,*.log,*.o,*.ss~ " files to ignore
 
 set visualbell " no sound
 
@@ -58,6 +60,18 @@ map <S-Enter> O<ESC>
 nnoremap <C-e> 4<C-e>
 nnoremap <C-y> 4<C-y>
 
+" navigate wrapped lines by holding command
+vmap <D-j> gj
+vmap <D-k> gk
+vmap <D-4> g$
+vmap <D-6> g^
+vmap <D-0> g^
+nmap <D-j> gj
+nmap <D-k> gk
+nmap <D-4> g$
+nmap <D-6> g^
+nmap <D-0> g^
+
 " keep tmp files in a safe place
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
@@ -65,6 +79,11 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 " ruler
 set ruler
 set rulerformat=%25(%n%m%r:\ %Y\ [%l,%v]\ %p%%%)
+
+" haskell mode
+let g:haddock_browser = "open"
+let g:haddock_browser_callformat = "%s %s"
+let g:haddock_docdir = "/usr/local/Cellar/ghc/6.12.2/share/doc/ghc"
 
 colorscheme oceandeep
 

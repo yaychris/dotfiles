@@ -6,14 +6,14 @@ export PAGER=less
 set -o vi
 
 ## Go
-export GOROOT="/Users/Chris/code/go"
+#export GOROOT=`brew --cellar`/go/HEAD
+export GOROOT="$HOME/code/go"
 export GOOS="darwin"
 export GOARCH="amd64"
-export GOBIN="/Users/Chris/code/go/bin"
-export PATH="$GOBIN:$PATH"
+export GOBIN="$HOME/code/go/bin"
 
 ## Path
-export PATH="./:/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+export PATH="./:$GOBIN:/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 
 ###
@@ -32,7 +32,13 @@ function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ [\1$(parse_git_dirty)]/"
 }
 
-export PS1='\[\e[32;1m\]\w\[\e[0m\]\[\e[36;1m\]$(parse_git_branch)\[\e[0m\]\n\[\e[90;1m\]>\[\e[0m\] '
+if [ "$(hostname)" = 'Phobos.local' ]; then
+  prompt_color='2' # green
+else
+  prompt_color='5' # purple
+fi
+
+export PS1='\[\e[3$prompt_color;1m\]\w\[\e[0m\]\[\e[36;1m\]$(parse_git_branch)\[\e[0m\]\n\[\e[90;1m\]>\[\e[0m\] '
 
 
 ###
