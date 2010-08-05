@@ -32,13 +32,19 @@ function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ [\1$(parse_git_dirty)]/"
 }
 
+function hostname_for_prompt {
+  if [ "$(hostname)" != 'Phobos.local' ]; then
+    echo "$(hostname):"
+  fi
+}
+
 if [ "$(hostname)" = 'Phobos.local' ]; then
   prompt_color='2' # green
 else
   prompt_color='5' # purple
 fi
 
-export PS1='\[\e[3$prompt_color;1m\]\w\[\e[0m\]\[\e[36;1m\]$(parse_git_branch)\[\e[0m\]\n\[\e[90;1m\]>\[\e[0m\] '
+export PS1='\[\e[3$prompt_color;1m\]$(hostname_for_prompt)\w\[\e[0m\]\[\e[36;1m\]$(parse_git_branch)\[\e[0m\]\n\[\e[90;1m\]>\[\e[0m\] '
 
 
 ###
