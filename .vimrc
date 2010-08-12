@@ -105,5 +105,5 @@ if has("gui_running")
 
   set lines=999 columns=80
 
-  set fuoptions=maxvert,maxhorz
+  set fuoptions=maxvert
 endif
