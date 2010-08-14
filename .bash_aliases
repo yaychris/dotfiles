@@ -7,6 +7,7 @@ if [ "$(uname)" = Darwin ]; then
 else
   # others
   alias lal="ls -AlF --color=auto"
+  alias pacman="pacman-color"
 fi
 
 alias cl="clear"
