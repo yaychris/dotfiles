@@ -12,6 +12,8 @@ fi
 
 alias cl="clear"
 alias fn="find . -name"
+alias oocaml="$(which ocaml)"
+alias ocaml="rlwrap ocaml"
 
 ## Git
 alias gcav="git commit -av"
