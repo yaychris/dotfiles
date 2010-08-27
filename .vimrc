@@ -2,9 +2,11 @@ set exrc " needed to make vroom work
 
 set nocompatible
 
-set encoding=utf-8 " one encoding to rule them all
+" persistent undo
+set undofile
+set undodir=~/.undo
 
-runtime macros/matchit.vim
+set encoding=utf-8 " one encoding to rule them all
 
 syntax on " turn on syntax highlighting
 filetype plugin indent on " turn on file type detection
@@ -44,14 +46,11 @@ set listchars=tab:▸\ ,eol:¬
 let mapleader = ","
 map <leader>i :set list!<CR>
 map <leader>t :NERDTreeToggle<CR>
-" map <leader>f :LustyFilesystemExplorer<CR>
 map <leader>f :FufFile<CR>
-" map <leader>F :LustyFilesystemExplorerFromHere<CR>
 map <leader>F :FufFileWithCurrentBufferDir<CR>
-" map <leader>b :LustyBufferExplorer<CR>
 map <leader>b :FufBuffer<CR>
-" fuzzy finder recursive (until lusty catches up)
 map <leader>/ :FufFileRecursive<CR>
+map <leader>r :FufRenewCache<CR>
 
 " enter adds blank lines
 map <Enter> o<ESC>
@@ -79,11 +78,6 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 " ruler
 set ruler
 set rulerformat=%25(%n%m%r:\ %Y\ [%l,%v]\ %p%%%)
-
-" haskell mode
-let g:haddock_browser = "open"
-let g:haddock_browser_callformat = "%s %s"
-let g:haddock_docdir = "/usr/local/Cellar/ghc/6.12.2/share/doc/ghc"
 
 colorscheme oceandeep
 
