@@ -6,6 +6,8 @@ set nocompatible
 set undofile
 set undodir=~/.undo
 
+runtime macros/matchit.vim
+
 set encoding=utf-8 " one encoding to rule them all
 
 syntax on " turn on syntax highlighting
@@ -43,18 +45,37 @@ set visualbell " no sound
 
 set listchars=tab:▸\ ,eol:¬
 
+" omni completion
+if has("autocmd") && exists("+omnifunc")
+  autocmd Filetype *
+    \ if &omnifunc == "" |
+    \   setlocal omnifunc=syntaxcomplete#Complete |
+    \ endif
+endif
+
+" Auto-apply .vimrc settings after saving
+" http://github.com/brettbuddin/dotfiles
+if has("autocmd")
+  autocmd bufwritepost .vimrc source $MYVIMRC
+endif
+
 let mapleader = ","
 map <leader>i :set list!<CR>
 map <leader>t :NERDTreeToggle<CR>
+
 map <leader>f :FufFile<CR>
 map <leader>F :FufFileWithCurrentBufferDir<CR>
 map <leader>b :FufBuffer<CR>
-map <leader>/ :FufFileRecursive<CR>
+map <leader>/ :FufFile **/<CR>
 map <leader>r :FufRenewCache<CR>
+map <leader>w <C-w>w
+map <leader>W <C-w>W
+map <leader>A :Ack 
 
 " enter adds blank lines
 map <Enter> o<ESC>
 map <S-Enter> O<ESC>
+map Y y$
 
 nnoremap <C-e> 4<C-e>
 nnoremap <C-y> 4<C-y>
@@ -77,7 +98,7 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 
 " ruler
 set ruler
-set rulerformat=%25(%n%m%r:\ %Y\ [%l,%v]\ %p%%%)
+set rulerformat=%25(%n%m%r:\ %y\ [%l,%v]\ %p%%%)
 
 colorscheme oceandeep
 
@@ -92,12 +113,12 @@ if has("gui_running")
   end
 
   " one font to rule them all
-  set guifont=Monaco:h13
+  set guifont=Monaco:h14
 
   " set guioptions=egmrt
   set go-=r
 
-  set lines=999 columns=80
+  set lines=999 columns=100
 
   set fuoptions=maxvert
 endif
