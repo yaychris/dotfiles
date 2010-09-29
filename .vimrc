@@ -68,6 +68,7 @@ map <leader>F :FufFileWithCurrentBufferDir<CR>
 map <leader>b :FufBuffer<CR>
 map <leader>/ :FufFile **/<CR>
 map <leader>r :FufRenewCache<CR>
+map <leader>x :call HexHighlight()<CR>
 map <leader>w <C-w>w
 map <leader>W <C-w>W
 map <leader>A :Ack 
