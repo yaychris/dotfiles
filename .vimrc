@@ -59,6 +59,8 @@ if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
 endif
 
+autocmd BufRead,BufNewFile {*.markdown,*.md} set linebreak spell
+
 let mapleader = ","
 map <leader>i :set list!<CR>
 map <leader>t :NERDTreeToggle<CR>
