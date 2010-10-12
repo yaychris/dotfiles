@@ -38,6 +38,7 @@ alias rta="rake test:all"
 alias rc="rake cucumber"
 alias rdb="rake db:blast"
 alias rdm="rake db:migrate"
+alias rr="touch tmp/restart.txt"
 
 ## Make
 alias m="make"
