@@ -1,3 +1,5 @@
+source ~/.config/fish/functions/j.fish
+
 ###
 # Aliases
 alias cl "clear"
@@ -61,7 +63,6 @@ set -x GOBIN $GOPATH/bin
 set PATH /usr/local/bin $PATH
 set PATH $GOBIN $PATH
 set PATH ./bin $PATH
-set PATH $HOME/.cargo/bin $PATH
 set PATH $HOME/bin $PATH
 
 

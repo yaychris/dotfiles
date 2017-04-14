@@ -1,6 +1,4 @@
 function fish_prompt
-  j --add
-
   set_color green
   echo -n (pwd | sed "s!^$HOME!~!")
 
