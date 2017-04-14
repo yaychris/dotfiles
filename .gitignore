@@ -1,2 +1,7 @@
-.netrwhist
-.vim/bundle
+config/fish/fish_history
+config/fish/fishd*
+
+config/yarn
+
+vim/plugged
+vim/tmp

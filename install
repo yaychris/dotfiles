@@ -1,23 +1,48 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
 
-# from http://errtheblog.com/posts/89-huba-huba
+set -e
 
-home = File.expand_path('~')
+red="\033[0;31m"
+green="\033[0;32m"
+yellow="\033[0;33m"
+cyan="\033[0;36m"
+nocolor="\033[0m"
 
-Dir.glob('*', File::FNM_DOTMATCH).each do |file|
-  # ignore installer and this/parent directories
-  next if file =~ /install|\.{1,2}(git)?$/
+files="\
+  bash_aliases \
+  bash_profile \
+  bashrc \
+  config \
+  gemrc \
+  gitconfig \
+  gitignore \
+  inputrc \
+  phoenix.js \
+  ptconfig.toml \
+  tmux.conf \
+  tmuxstatusline.conf \
+  vim \
+  vimrc \
+  "
 
-  target = File.join(home, "#{file}")
+for file in $files; do
+  source="$(pwd)/$file"
+  target="$HOME/.$file"
 
-  if File.exists? target
-    puts " !! #{target} already exists"
+  echo -en "~/.${file} ... "
+
+  if [ ! -e "$source" ]; then
+    echo -e "${red}${file} doesn't exist${nocolor}"
+
+  elif [ -h "$target" ]; then
+    echo -e "${green}installed${nocolor}"
+
+  elif [ -d "$target" ] || [ -f "$target" ]; then
+    echo -e "${red}something already exists here${nocolor}"
+
   else
-    `ln -s #{File.expand_path file} #{target}`
-    puts " -> linked #{file} to #{target}"
-  end
-end
+    ln -s "$source" "$target"
 
-# git push on commit
-`echo 'git push origin master' > .git/hooks/post-commit`
-`chmod 755 .git/hooks/post-commit`
+    echo -e "${yellow}link created${nocolor}"
+  fi
+done

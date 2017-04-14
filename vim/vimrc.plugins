@@ -1,0 +1,53 @@
+if &compatible
+  set nocompatible
+end
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-dispatch'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --gocode-completer' }
+Plug 'scrooloose/syntastic'
+Plug 'kana/vim-textobj-user' | Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'gregsexton/VimCalc'
+Plug 'airblade/vim-gitgutter'
+Plug 'Shougo/unite.vim'
+Plug 'bling/vim-airline'
+Plug 'chriskempson/tomorrow-theme', { 'rtp': 'vim/' }
+Plug 'elixir-lang/vim-elixir'
+Plug 'avdgaag/vim-phoenix'
+Plug 'isRuslan/vim-es6'
+Plug 'rust-lang/rust.vim'
+Plug 'cespare/vim-toml'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'pearofducks/ansible-vim'
+Plug 'fatih/vim-go'
+Plug 'elzr/vim-json'
+
+" Plugin 'hail2u/vim-css3-syntax'
+" Plugin 'othree/html5.vim'
+" Plugin 'jnwhiteh/vim-golang'
+" Plugin 'edkolev/tmuxline.vim'
+" Plugin 'chrisbra/csv.vim'
+" Plugin 'altercation/vim-colors-solarized'
+" Plugin 'yaychris/tomorrow-theme', { 'rtp': 'vim/' }
+" Plugin 'ekalinin/Dockerfile.vim'
+" Plugin 'mxw/vim-jsx'
+" Plugin 'kien/rainbow_parentheses.vim'
+" Plugin 'lambdatoast/elm.vim'
+
+if filereadable(glob('~/.vim/vimrc.plugins.local'))
+  source ~/.vim/vimrc.plugins.local
+endif
+
+call plug#end()
