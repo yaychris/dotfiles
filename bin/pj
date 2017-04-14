@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+help() {
+  echo "usage: prj [options]"
+  echo ""
+  echo "options:"
+  echo "  -n  tmux session name"
+  echo "  -p  file system path"
+}
+
+exists() {
+  tmux has-session -t $1 2>/dev/null
+}
+
+while [[ $# -gt 1 ]]; do
+  key="$1"
+
+  case $key in
+    -n)
+      NAME="$2"
+      shift
+      ;;
+
+    -p)
+      BASE="$2"
+      shift
+      ;;
+    *)
+      help
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+if [ -z "$NAME" ] || [ -z "$BASE" ]; then
+  help
+  exit 1
+fi
+
+if exists $NAME; then
+  echo "tmux session already exists:"
+  echo ""
+  echo "  tmux attach -t $NAME"
+
+  exit 0
+fi
+
+if [ ! -d $BASE ]; then
+  echo "directory does not exist: $BASE"
+  exit 1
+fi
+
+cd $BASE
+
+tmux new-session -d -s $NAME -n server
+tmux new-window -t $NAME:2 -n vim
+
+tmux split-window -h -t $NAME:2
+
+tmux send-keys -t $NAME:1 "cd $BASE; cl" C-m
+tmux send-keys -t $NAME:2.1 "cd $BASE; cl" C-m
+tmux send-keys -t $NAME:2.2 "cd $BASE; cl; vim" C-m
+
+tmux select-window -t $NAME:2.1
+
+cd - > /dev/null
+
+echo "tmux session ready:"
+echo ""
+echo "  tmux attach -t $NAME"
+
+exit

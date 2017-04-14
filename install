@@ -12,6 +12,7 @@ files="\
   bash_aliases \
   bash_profile \
   bashrc \
+  bin \
   config \
   gemrc \
   gitconfig \

@@ -63,7 +63,7 @@ set -x GOBIN $GOPATH/bin
 set PATH /usr/local/bin $PATH
 set PATH $GOBIN $PATH
 set PATH ./bin $PATH
-set PATH $HOME/bin $PATH
+set PATH $HOME/.bin $PATH
 
 
 set -x FZF_DEFAULT_COMMAND 'pt --hidden --ignore .git -g ""'
