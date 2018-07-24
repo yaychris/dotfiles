@@ -10,7 +10,7 @@ if filereadable(glob('~/.vim/vimrc.plugins'))
 endif
 
 " Fzf
-let g:fzf_layout = { 'window': 'enew' }
+" let g:fzf_layout = { 'window': 'enew' }
 
 
 " Airline
@@ -32,6 +32,7 @@ let g:airline_mode_map = {
 " Only show branch in section b
 "let g:airline_section_b = airline#section#create(['branch'])
 let g:airline#extensions#hunks#enabled = 0
+let g:airline#extensions#ale#enabled = 1
 
 " Show path relative to cwd
 let g:airline_section_c = '%f%m'
@@ -48,9 +49,12 @@ let g:airline_symbols.maxlinenr = ''
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
 
-" Syntastic
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
+" ALE
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚠'
+let g:ale_lint_delay = 2000 " 2 seconds
+let g:ale_sh_shellcheck_options = '-x'
+let g:ale_open_list = 1
 
 
 " YouCompleteMe
@@ -76,6 +80,16 @@ let g:vim_json_syntax_conceal = 0
 " Fix broken vim-json syntax highlighting
 hi! def link jsonKeyword Identifier
 
+" Sonic Pi
+let g:sonicpi_command = 'sonic-pi-tool'
+let g:sonicpi_keymaps_enabled = 0
+
+" vim-align
+let g:easy_align_delimiters = {
+\  '>': { 'pattern': '->', 'left_margin': 1, 'right_margin': 1, 'stick_to_left': 0 },
+\  '<': { 'pattern': '<-', 'left_margin': 1, 'right_margin': 1, 'stick_to_left': 0 }
+\ }
+
 
 """
 " Settings
@@ -87,9 +101,12 @@ runtime macros/matchit.vim
 
 colorscheme Tomorrow-Night-Eighties
 
+highlight CursorLineNR ctermfg=cyan
+
 set autoindent
 set backspace=indent,eol,start
 set backupdir=~/.vim/tmp/backup
+set cursorline
 set dir=~/.vim/tmp/swap/
 set encoding=utf-8
 set expandtab
@@ -120,11 +137,12 @@ set wildmode=list:longest
 """
 " Mappings
 "
-let mapleader = ","
+let mapleader = " "
 
 nnoremap <leader>i :set list!<CR>
 nnoremap <leader>t :NERDTreeToggle<CR>
 nnoremap <leader>g :e %:.:h/
+nnoremap <leader>c :saveas %:p:h/
 
 " Fzf
 nnoremap <leader>f :Files<CR>
@@ -165,6 +183,14 @@ nnoremap <leader>m o"va-vsrv-github.a.internal/it/malinois/"<LEFT>
 " Go
 nnoremap <leader>r :GoRun %<CR>
 
+" Sonic Pi
+nnoremap <leader>R :SonicPiSendBuffer<CR>
+nnoremap <leader>S :SonicPiStop<CR>
+
+" Shaden
+vnoremap <C-S-P> :<C-U>ShadenPatchSelection<CR>
+nnoremap <C-S-P> :<C-U>ShadenPatchLine<CR>
+
 
 """
 " Commands
@@ -182,6 +208,8 @@ augroup filetypes
   autocmd FileType objc,c setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
   autocmd FileType go setlocal tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
   autocmd FileType markdown setlocal linebreak
+  autocmd FileType c,cpp setlocal commentstring=//\ %s
+  autocmd FileType terraform setlocal commentstring=#\ %s
 augroup END
 
 
