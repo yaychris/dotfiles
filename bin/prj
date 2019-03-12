@@ -1,73 +1,259 @@
 #!/usr/bin/env bash
 
-help() {
-  echo "usage: prj [options]"
-  echo ""
-  echo "options:"
-  echo "  -n  tmux session name"
-  echo "  -p  file system path"
+PRJ_FILE="$HOME/.prj"
+
+set -e
+
+error() {
+  echo "error: $*" >&2
 }
 
-exists() {
-  tmux has-session -t $1 2>/dev/null
+session-exists() {
+  tmux ls -F "#{session_name}" 2> /dev/null | grep -Fx "$1" > /dev/null
 }
 
-while [[ $# -gt 1 ]]; do
-  key="$1"
+# ADD
+prj-add() {
+  usage() {
+    cat <<-END
 
-  case $key in
-    -n)
-      NAME="$2"
-      shift
+Add a new project
+
+Usage: prj add -n [name] -p [path]
+
+Options:
+
+  -n              Project name
+  -p              Path to the project
+
+END
+  }
+
+  local name=""
+  local path=""
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h|--help|help)
+        usage
+        exit
+        ;;
+
+      -n)
+        name="$2"
+        shift
+        shift
+        ;;
+
+      -p)
+        path="$2"
+        shift
+        shift
+        ;;
+
+      *)
+        error "unknown option $1"
+        exit 1
+    esac
+  done
+
+  if [[ -z "$name" ]]; then
+    error "must specify -n option"
+    exit 1
+  fi
+
+  if [[ -z "$path" ]]; then
+    error "must specify -p option"
+    exit 1
+  fi
+
+  add-project "$name" "$path"
+}
+
+add-project() {
+  local name="$1"
+  local path="$2"
+
+  if [[ ! -d "$path" ]]; then
+    mkdir -p "$path"
+  fi
+
+  echo "$name:$path" >> "$PRJ_FILE"
+  echo "added $name"
+}
+
+# EDIT
+prj-edit() {
+  "$EDITOR" "$PRJ_FILE"
+}
+
+# LIST
+prj-ls() {
+  usage() {
+    cat <<-END
+
+Lists all prj projects
+
+Usage: prj ls
+
+END
+  }
+
+  case "$1" in
+    -h|--help|help)
+      usage
+      exit
       ;;
 
-    -p)
-      BASE="$2"
-      shift
+    "")
+      ls-projects
+      exit
       ;;
+
     *)
-      help
+      error "unknown option $1"
       exit 1
       ;;
   esac
-  shift
-done
+}
 
-if [ -z "$NAME" ] || [ -z "$BASE" ]; then
-  help
-  exit 1
-fi
+ls-projects() {
+  if [[ $(wc -l "$PRJ_FILE") == "0" ]]; then
+    echo "(no projects)" >&2
+    exit
+  fi
 
-if exists $NAME; then
-  echo "tmux session already exists:"
-  echo ""
-  echo "  tmux attach -t $NAME"
+  column -t -s ':' "$PRJ_FILE" | sort
+}
 
-  exit 0
-fi
+# OPEN
+prj-open() {
+  usage() {
+    cat <<-END
 
-if [ ! -d $BASE ]; then
-  echo "directory does not exist: $BASE"
-  exit 1
-fi
+Open a project
 
-cd $BASE
+Usage: prj open [name]
 
-tmux new-session -d -s $NAME -n server
-tmux new-window -t $NAME:2 -n vim
+END
+  }
 
-tmux split-window -h -t $NAME:2
+  case "$1" in
+    -h|--help|help)
+      usage
+      exit
+      ;;
 
-tmux send-keys -t $NAME:1 "cd $BASE; cl" C-m
-tmux send-keys -t $NAME:2.1 "cd $BASE; cl" C-m
-tmux send-keys -t $NAME:2.2 "cd $BASE; cl; vim" C-m
+    "")
+      error "you must specify a project name"
+      exit 1
+      ;;
 
-tmux select-window -t $NAME:2.1
+    *)
+      open-project "$1"
+      ;;
+  esac
+}
 
-cd - > /dev/null
+open-project() {
+  local name="$1"
 
-echo "tmux session ready:"
-echo ""
-echo "  tmux attach -t $NAME"
+  local path
+  path="$(grep "^$name:" < "$PRJ_FILE" | cut -d ':' -f 2)"
 
-exit
+  if [[ "$path" == "" ]]; then
+    error "unknown project $name"
+    exit 1
+  fi
+
+  if session-exists "$name"; then
+    cat <<-END
+
+project already open:
+
+  tmux attach -t $name
+
+END
+
+    exit
+  fi
+
+  if [ ! -d "$path" ]; then
+    error "directory does not exist: $path"
+    exit 1
+  fi
+
+  cd "$path"
+
+  tmux new-session -d -s "$name" -n vim
+
+  tmux split-window -h -t "$name"
+
+  tmux send-keys -t "$name:1.1" "cd '$path'; cl" C-m
+  tmux send-keys -t "$name:1.2" "cd '$path'; cl; vim" C-m
+
+  tmux select-window -t "$name:1.1"
+
+  cd - > /dev/null
+
+  cat <<-END
+
+project ready:
+
+    tmux attach -t $name
+
+END
+}
+
+main() {
+  if [[ ! -f "$PRJ_FILE" ]]; then
+    touch "$PRJ_FILE"
+  fi
+
+  usage() {
+    cat <<-END
+
+Creates tmux session and windows for a project
+
+Usage: prj [command]
+
+  add             Add a new project
+  edit            Edit the .prj config file
+  help            This help text
+  ls              List all projects
+  open            Open a project
+
+END
+  }
+
+  if [[ $# -eq 0 ]]; then
+    error "specify a command"
+    exit 1
+  fi
+
+  while [[ $# -gt 0 ]]; do
+    local arg="$1"
+
+    case "$arg" in
+      -h|--help|help)
+        usage
+        exit
+        ;;
+
+      add|edit|ls|open)
+        shift
+
+        "prj-$arg" "$@"
+        exit
+        ;;
+
+      *)
+        error "unknown option $arg"
+        exit 1
+        ;;
+    esac
+    shift
+  done
+}
+
+main "$@"
