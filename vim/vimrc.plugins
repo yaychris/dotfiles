@@ -37,7 +37,14 @@ Plug 'elzr/vim-json'
 Plug 'dermusikman/sonicpi.vim'
 Plug 'hashivim/vim-hashicorp-tools'
 Plug 'keith/swift.vim'
+Plug 'luochen1990/rainbow'
+Plug 'guns/vim-sexp'
+Plug 'tpope/vim-sexp-mappings-for-regular-people'
 
+" vim-orgmode
+Plug 'jceb/vim-orgmode'
+Plug 'vim-scripts/utl.vim'
+Plug 'vim-scripts/speeddating.vim'
 
 " Plugin 'hail2u/vim-css3-syntax'
 " Plugin 'othree/html5.vim'

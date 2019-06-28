@@ -55,6 +55,11 @@ let g:ale_sign_warning = '⚠'
 let g:ale_lint_delay = 2000 " 2 seconds
 let g:ale_sh_shellcheck_options = '-x'
 let g:ale_open_list = 1
+let g:ale_list_window_size = 5
+let g:ale_linters = {
+\   'cpp': ['clang'],
+\   'elixir': [],
+\}
 
 
 " YouCompleteMe
@@ -89,6 +94,19 @@ let g:easy_align_delimiters = {
 \  '>': { 'pattern': '->', 'left_margin': 1, 'right_margin': 1, 'stick_to_left': 0 },
 \  '<': { 'pattern': '<-', 'left_margin': 1, 'right_margin': 1, 'stick_to_left': 0 }
 \ }
+
+" Rainbow
+" clojure rainbow parens
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+\  'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+\  'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+\  'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+\  'separately': {
+\    '*': 0,
+\    'clojure': {},
+\  }
+\}
 
 
 """
@@ -133,11 +151,16 @@ set visualbell
 set wildignore=*.DS_Store,*.dSYM,*.log,*.o,*.ss~
 set wildmode=list:longest
 
+" Fix performance problems with Ruby syntax highlighting
+set lazyredraw
+set regexpengine=1
+
 
 """
 " Mappings
 "
 let mapleader = " "
+let maplocalleader = ","
 
 nnoremap <leader>i :set list!<CR>
 nnoremap <leader>t :NERDTreeToggle<CR>
@@ -208,7 +231,7 @@ augroup filetypes
   autocmd FileType objc,c setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
   autocmd FileType go setlocal tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
   autocmd FileType markdown setlocal linebreak
-  autocmd FileType c,cpp setlocal commentstring=//\ %s
+  autocmd FileType arduino,c,cpp setlocal commentstring=//\ %s
   autocmd FileType terraform setlocal commentstring=#\ %s
 augroup END
 
