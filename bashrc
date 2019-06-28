@@ -1,6 +1,8 @@
+#!/usr/bin/env bash
+
 ###
 # ENV
-export EDITOR=vim
+export EDITOR=/usr/local/bin/vim
 export PAGER=less
 
 set -o vi
