@@ -3,4 +3,4 @@
 .vim/bundle
 .rbenv-gemsets
 .ptconfig.toml
-cjspike.go
+scratch.go

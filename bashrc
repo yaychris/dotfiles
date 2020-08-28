@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+local_hostname="Charon.local"
+
 ###
 # ENV
 export EDITOR=/usr/local/bin/vim
@@ -21,76 +23,92 @@ export PATH="./:$PATH"
 export PATH="$PATH:/usr/hla"
 export PATH="$PATH:/usr/local/lib/node_modules"
 export PATH="$PATH:/usr/local/lib/node_modules"
-
-## Ruby GC settings
-#export RUBY_HEAP_MIN_SLOTS=2000000
-#export RUBY_HEAP_SLOTS_INCREMENT=500000
-#export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
-#export RUBY_GC_MALLOC_LIMIT=100000000
-#export RUBY_HEAP_FREE_MIN=500000
-
-## HLA
-export hlalib=/usr/hla/hlalib
-export hlainc=/usr/hla/include
-
-export NODE_PATH=/usr/local/lib/node_modules
+export PATH="$PATH:$HOME/viget/devops/q/bin"
 
 ###
 # Aliases
 if [ -f ~/.bash_aliases ]; then
+  # shellcheck disable=SC1090
   . ~/.bash_aliases
 fi
 
 ###
 # Git completion
-. ~/.git.bash
+if [ -f ~/.git.bash ]; then
+  # shellcheck disable=SC1090
+  . ~/.git.bash
+fi
 
 complete -o default -o nospace -F _git_checkout gco
 complete -o default -o nospace -F _git_branch gb
 
 ###
 # Prompt
-function parse_git_dirty {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "☹"
-}
-
-function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ [\1$(parse_git_dirty)]/"
-}
-
-function rbenv_version {
-  rbenv versions 2> /dev/null | awk '/^\* / { print "(" $2 ")" }'
-}
-
-function hostname_for_prompt {
-  if [ "$(hostname)" != 'Callisto.local' ]; then
-    echo "$(hostname):"
+prompt_git_dirty() {
+  if [ -e .git ]; then
+    [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo " ☠️ "
   fi
 }
 
-if [ "$(hostname)" = 'Phobos.local' ]; then
-  prompt_color='2' # green
-else
-  prompt_color='5' # purple
-fi
+prompt_git_branch() {
+  if [ -e .git ]; then
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \\(.*\\)/ [\\1$(prompt_git_dirty)]/"
+  fi
+}
 
-export PS1='\[\e[3$prompt_color;1m\]$(hostname_for_prompt)\w\[\e[0m\]\[\e[36;1m\]$(parse_git_branch)\[\e[0m\] \[\e[36;1m\]$(rbenv_version)\[\e[0m\]\n\[\e[38;1m\]>\[\e[0m\] '
+prompt_rbenv_version() {
+  if [ -e .ruby_version ]; then
+    rbenv versions 2> /dev/null | awk '/^\* / { print "(" $2 ")" }'
+  fi
+}
+
+# green='\e[32;1m'
+# purple='\[\e[35;1m]\]'
+# nc='\[\e[0m]\]'
+
+green="\\e[0;32m"
+yellow='\e[0;33m'
+purple='\e[0;35m'
+cyan='\e[0;36m'
+nc="\\e[0m"
+
+prompt_hostname() {
+  local color
+
+  if [ "$(hostname)" = "$local_hostname" ]; then
+    color="$green"
+  else
+    color="$purple"
+  fi
+
+  if [ "$(hostname)" != "$local_hostname" ]; then
+    echo -e "$color$(hostname):$nc "
+  fi
+}
+
+# export PS1='\[$green\]\w\[$nc\]\[\e[0m\]\[\e[36;1m\]$(prompt_git_branch)\[\e[0m\] \[\e[36;1m\]$(prompt_rbenv_version)\[\e[0m\]\n\[\e[38;1m\]→\[\e[0m\] '
+export PS1='$(prompt_hostname)\[$(echo -e $green)\]\w\[$(echo -e $nc)\] \n→ '
 
 ###
 # rbenv
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-export RBENV_ROOT=/usr/local/var/rbenv
+if command -v rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+export RBENV_ROOT="$HOME/.rbenv"
 
 ###
 # j (http://github.com/rupa/j/)
-. ~/.j.sh
+if [ -f ~/.j.sh ]; then
+  # shellcheck disable=SC1090
+  . ~/.j.sh
+fi
 
 
-function cpssh() {
-  cat ~/.ssh/id_rsa.pub | pbcopy
+cpssh() {
+  pbcopy < ~/.ssh/id_rsa.pub
 }
 
-export NVM_DIR="/Users/Chris/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+if [ -f ~/.fzf.bash ]; then
+  # shellcheck disable=SC1090
+  . ~/.fzf.bash
+fi
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export PATH="$HOME/.yarn/bin:$PATH"

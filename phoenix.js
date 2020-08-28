@@ -280,26 +280,26 @@ var getSubFrame = function(parentFrame, direction) {
     var parentTwoThirds = parentThird * 2;
 
     var subFrames = {
-        left:         { x: x(),                 y: y(),                 width: parentHalfWide, height: parentHeight   },
-        right:        { x: x(parentHalfWide),   y: y(),                 width: parentHalfWide, height: parentHeight   },
-        up:           { x: x(),                 y: y(),                 width: parentWidth,    height: parentHalfHigh },
-        down:         { x: x(),                 y: y(parentHalfHigh),   width: parentWidth,    height: parentHalfHigh },
-        topLeft:      { x: x(),                 y: y(),                 width: parentHalfWide, height: parentHalfHigh },
-        bottomLeft:   { x: x(),                 y: y(parentHalfHigh),   width: parentHalfWide, height: parentHalfHigh },
-        topRight:     { x: x(parentHalfWide),   y: y(),                 width: parentHalfWide, height: parentHalfHigh },
-        bottomRight:  { x: x(parentHalfWide),   y: y(parentHalfHigh),   width: parentHalfWide, height: parentHalfHigh },
-        centre:       { x: x(parentHalfWide/2), y: y(parentHalfHigh/2), width: parentHalfWide, height: parentHalfHigh },
-        leftThird:    { x: x(),                 y: y(),                 width: parentThird,    height: parentHeight   },
-        centreThird:  { x: x(parentThird),      y: y(),                 width: parentThird,    height: parentHeight   },
-        rightThird:   { x: x(parentTwoThirds),  y: y(),                 width: parentThird,    height: parentHeight   },
-        left2Thirds:  { x: x(),                 y: y(),                 width: parentTwoThirds, height: parentHeight  },
-        right2Thirds: { x: x(parentThird),      y: y(),                 width: parentTwoThirds, height: parentHeight  },
-        topLeftSix:   { x: x(),                 y: y(),                 width: parentThird,    height: parentHalfHigh },
-        topCentreSix: { x: x(parentThird),      y: y(),                 width: parentThird,    height: parentHalfHigh },
-        topRightSix:  { x: x(parentTwoThirds),  y: y(),                 width: parentThird,    height: parentHalfHigh },
-        botLeftSix:   { x: x(),                 y: y(parentHalfHigh),   width: parentThird,    height: parentHalfHigh },
-        botCentreSix: { x: x(parentThird),      y: y(parentHalfHigh),   width: parentThird,    height: parentHalfHigh },
-        botRightSix:  { x: x(parentTwoThirds),  y: y(parentHalfHigh),   width: parentThird,    height: parentHalfHigh }
+        left:         { x: x(),                 y: y(),                 width: parentHalfWide,      height: parentHeight         },
+        right:        { x: x(parentHalfWide),   y: y(),                 width: parentHalfWide,      height: parentHeight         },
+        up:           { x: x(),                 y: y(),                 width: parentWidth,         height: parentHalfHigh       },
+        down:         { x: x(),                 y: y(parentHalfHigh),   width: parentWidth,         height: parentHalfHigh       },
+        topLeft:      { x: x(),                 y: y(),                 width: parentHalfWide,      height: parentHalfHigh       },
+        bottomLeft:   { x: x(),                 y: y(parentHalfHigh),   width: parentHalfWide,      height: parentHalfHigh       },
+        topRight:     { x: x(parentHalfWide),   y: y(),                 width: parentHalfWide,      height: parentHalfHigh       },
+        bottomRight:  { x: x(parentHalfWide),   y: y(parentHalfHigh),   width: parentHalfWide,      height: parentHalfHigh       },
+        centre:       { x: x(parentWidth/6),    y: y(parentHeight/6),   width: (parentWidth*(4/6)), height: (parentHeight*(4/6)) },
+        leftThird:    { x: x(),                 y: y(),                 width: parentThird,         height: parentHeight         },
+        centreThird:  { x: x(parentThird),      y: y(),                 width: parentThird,         height: parentHeight         },
+        rightThird:   { x: x(parentTwoThirds),  y: y(),                 width: parentThird,         height: parentHeight         },
+        left2Thirds:  { x: x(),                 y: y(),                 width: parentTwoThirds,     height: parentHeight         },
+        right2Thirds: { x: x(parentThird),      y: y(),                 width: parentTwoThirds,     height: parentHeight         },
+        topLeftSix:   { x: x(),                 y: y(),                 width: parentThird,         height: parentHalfHigh       },
+        topCentreSix: { x: x(parentThird),      y: y(),                 width: parentThird,         height: parentHalfHigh       },
+        topRightSix:  { x: x(parentTwoThirds),  y: y(),                 width: parentThird,         height: parentHalfHigh       },
+        botLeftSix:   { x: x(),                 y: y(parentHalfHigh),   width: parentThird,         height: parentHalfHigh       },
+        botCentreSix: { x: x(parentThird),      y: y(parentHalfHigh),   width: parentThird,         height: parentHalfHigh       },
+        botRightSix:  { x: x(parentTwoThirds),  y: y(parentHalfHigh),   width: parentThird,         height: parentHalfHigh       }
     };
 
     return subFrames[direction];

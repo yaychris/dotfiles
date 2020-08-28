@@ -59,6 +59,7 @@ let g:ale_list_window_size = 5
 let g:ale_linters = {
 \   'cpp': ['clang'],
 \   'elixir': [],
+\   'php': [],
 \}
 
 
@@ -227,11 +228,14 @@ command! StripWhitespace %s/\s\+$//e | noh
 augroup filetypes
   autocmd BufRead,BufNewFile {*.markdown,*.md} set filetype=markdown
   autocmd BufRead,BufNewFile {Gemfile,Vagrantfile,*.arb} set filetype=ruby
+  autocmd BufRead,BufNewFile {*.toml.j2} set filetype=toml
+  autocmd BufRead,BufNewFile {*.tfstate} set filetype=json
 
-  autocmd FileType objc,c setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+  autocmd FileType objc,c,cs setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
   autocmd FileType go setlocal tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
+  autocmd FileType php setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
   autocmd FileType markdown setlocal linebreak
-  autocmd FileType arduino,c,cpp setlocal commentstring=//\ %s
+  autocmd FileType arduino,c,cpp,php setlocal commentstring=//\ %s
   autocmd FileType terraform setlocal commentstring=#\ %s
 augroup END
 

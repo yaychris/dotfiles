@@ -1,4 +1,8 @@
 function fish_mode_prompt --description 'Displays the current mode'
+  # if test -e ".nvmrc"
+  #   nvm use (cat .nvmrc)
+  # end
+
   switch $fish_bind_mode
   case default
     set_color --bold --background yellow black

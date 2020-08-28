@@ -12,12 +12,64 @@ session-exists() {
   tmux ls -F "#{session_name}" 2> /dev/null | grep -Fx "$1" > /dev/null
 }
 
+create-session() {
+  local name="$1"
+  local path="$2"
+
+  if [ ! -d "$path" ]; then
+    error "directory does not exist: $path"
+    exit 1
+  fi
+
+  {
+    cd "$path"
+
+    tmux new-session -d -s "$name" -n vim
+
+    tmux split-window -h -t "$name"
+
+    tmux send-keys -t "$name:1.1" "cd '$path'; cl" C-m
+    tmux send-keys -t "$name:1.2" "cd '$path'; cl; vim" C-m
+
+    tmux select-window -t "$name:1.1"
+
+    sleep 1
+
+    # cd - > /dev/null
+  }
+}
+
+open-session() {
+  local name="$1"
+  local cmd="attach"
+
+  if [ -n "$TMUX" ]; then
+    cmd="switchc"
+  fi
+
+  tmux "$cmd" -t "$name"
+}
+
+find-project() {
+  local name="$1"
+
+  local path
+  path="$(grep "^$name:" < "$PRJ_FILE" | cut -d ':' -f 2)"
+
+  if [[ "$path" == "" ]]; then
+    error "unknown project $name"
+    exit 1
+  fi
+
+  echo "$path"
+}
+
 # ADD
 prj-add() {
   usage() {
     cat <<-END
 
-Add a new project
+Manage project screens
 
 Usage: prj add -n [name] -p [path]
 
@@ -80,6 +132,45 @@ add-project() {
 
   echo "$name:$path" >> "$PRJ_FILE"
   echo "added $name"
+}
+
+# CD
+prj-cd() {
+  usage() {
+    cat <<-END
+
+Change to a project directory
+
+Usage: prj cd [name]
+
+END
+  }
+
+  case "$1" in
+    -h|--help|help)
+      usage
+      exit
+      ;;
+
+    "")
+      error "you must specify a project name"
+      exit 1
+      ;;
+
+    *)
+      cd-project "$1"
+      ;;
+  esac
+}
+
+cd-project() {
+  local name="$1"
+
+  local path
+  path="$(find-project "$name")"
+
+  echo "$path"
+  exit
 }
 
 # EDIT
@@ -159,50 +250,14 @@ open-project() {
   local name="$1"
 
   local path
-  path="$(grep "^$name:" < "$PRJ_FILE" | cut -d ':' -f 2)"
+  path="$(find-project "$name")"
 
-  if [[ "$path" == "" ]]; then
-    error "unknown project $name"
-    exit 1
+  if ! session-exists "$name"; then
+    create-session "$name" "$path"
   fi
 
-  if session-exists "$name"; then
-    cat <<-END
-
-project already open:
-
-  tmux attach -t $name
-
-END
-
-    exit
-  fi
-
-  if [ ! -d "$path" ]; then
-    error "directory does not exist: $path"
-    exit 1
-  fi
-
-  cd "$path"
-
-  tmux new-session -d -s "$name" -n vim
-
-  tmux split-window -h -t "$name"
-
-  tmux send-keys -t "$name:1.1" "cd '$path'; cl" C-m
-  tmux send-keys -t "$name:1.2" "cd '$path'; cl; vim" C-m
-
-  tmux select-window -t "$name:1.1"
-
-  cd - > /dev/null
-
-  cat <<-END
-
-project ready:
-
-    tmux attach -t $name
-
-END
+  open-session "$name"
+  exit
 }
 
 main() {
@@ -218,6 +273,7 @@ Creates tmux session and windows for a project
 Usage: prj [command]
 
   add             Add a new project
+  cd              Change to a project directory
   edit            Edit the .prj config file
   help            This help text
   ls              List all projects
@@ -240,7 +296,7 @@ END
         exit
         ;;
 
-      add|edit|ls|open)
+      add|cd|edit|ls|open)
         shift
 
         "prj-$arg" "$@"
