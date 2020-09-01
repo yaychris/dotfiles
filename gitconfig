@@ -1,13 +1,13 @@
 [core]
-	excludesfile = /Users/Chris/.gitignore
-  pager = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
+  excludesfile = /Users/chris/.gitignore
+  pager = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
   editor = /usr/local/bin/vim
 [user]
-	email = chris.jones@viget.com
+  email = chris.jones@viget.com
   name = Chris Jones
-	signingkey = 4DD597B7D6BF5E57
+  signingkey = 4DD597B7D6BF5E57
 [push]
-	default = tracking
+  default = tracking
 [color]
   ui = always
 [color "diff"]
@@ -29,8 +29,8 @@
 [tig]
   vertical-split = false
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  required = true
 [gpg]
-	program = gpg2
+  program = gpg2
