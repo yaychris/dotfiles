@@ -100,7 +100,9 @@ rbenv init - --no-rehash fish | source
 
 ####
 ## asdf
-source ~/.asdf/asdf.fish
+if test -e ~/.asdf/asdf.fish
+  source ~/.asdf/asdf.fish
+end
 
 ###
 # nodenv setup
