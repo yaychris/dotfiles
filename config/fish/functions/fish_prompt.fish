@@ -26,8 +26,11 @@ function fish_prompt
     set ruby_version (rbenv versions 2> /dev/null | awk '/^\* / { print "(ruby: " $2 ")" }')
   end
 
+  set_color cyan
+  echo -s -n '(' (date +'%H:%M:%S') ')'
+
   set_color green
-  echo -n "$path"
+  echo -n " $path"
 
   set_color cyan
   echo -n " $ruby_version $git_submodule $git_branch $git_dirty" | tr -s ' '

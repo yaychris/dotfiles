@@ -117,4 +117,6 @@ nodenv init - --no-rehash fish | source
 set -x J_COMMAND $GOBIN/jgo
 set -x J_DATA "$HOME/.j"
 
+source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc
+
 # if which swiftenv > /dev/null; status --is-interactive; and source (swiftenv init -|psub); end
