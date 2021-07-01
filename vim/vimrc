@@ -60,6 +60,7 @@ let g:ale_linters = {
 \   'cpp': ['clang'],
 \   'elixir': [],
 \   'php': [],
+\   'ruby': [],
 \}
 
 
