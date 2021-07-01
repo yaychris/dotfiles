@@ -234,6 +234,8 @@ augroup filetypes
   autocmd BufRead,BufNewFile {Gemfile,Vagrantfile,*.arb} set filetype=ruby
   autocmd BufRead,BufNewFile {*.toml.j2} set filetype=toml
   autocmd BufRead,BufNewFile {*.tfstate} set filetype=json
+  autocmd BufRead,BufNewFile {*.conf.j2} set filetype=nginx.jinja2
+  autocmd BufRead,BufNewFile {*.service.j2} set filetype=systemd.jinja2
 
   autocmd FileType objc,c,cs setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
   autocmd FileType go setlocal tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
