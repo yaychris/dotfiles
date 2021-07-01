@@ -18,7 +18,7 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --gocode-completer' }
 Plug 'w0rp/ale'
 Plug 'kana/vim-textobj-user' | Plug 'nelstrom/vim-textobj-rubyblock'
-Plug 'gregsexton/VimCalc'
+Plug 'fedorenchik/VimCalc3'
 Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/unite.vim'
 Plug 'bling/vim-airline'
@@ -41,6 +41,8 @@ Plug 'luochen1990/rainbow'
 Plug 'guns/vim-sexp'
 Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'fgsch/vim-varnish'
+Plug 'nelsyeung/twig.vim'
+Plug 'chr4/nginx.vim'
 
 " vim-orgmode
 Plug 'jceb/vim-orgmode'
