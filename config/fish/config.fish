@@ -91,6 +91,8 @@ set -x FZF_DEFAULT_COMMAND 'pt --hidden --ignore .git -g ""'
 
 set -x TERM screen-256color
 
+set -x HOMEBREW_NO_INSTALL_CLEANUP 1
+
 set -x GPG_TTY (tty)
 
 ####
