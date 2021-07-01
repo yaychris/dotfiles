@@ -15,7 +15,7 @@ alias fn "find . -name"
 alias d "docker"
 alias dc "docker-compose"
 
-## Git
+# Git
 alias amend "git commit --amend"
 alias gai   "git add -i"
 alias gap   "git add --patch"
@@ -34,7 +34,7 @@ alias gst   "git status"
 alias gsts  "git status -s"
 alias tiga  "tig --all"
 
-## Ruby
+# Ruby
 alias ss "script/server"
 alias sc "script/console"
 alias sg "script/generate"
@@ -54,15 +54,19 @@ alias be "bundle exec"
 alias cap "bundle exec cap"
 alias oci "open coverage/index.html"
 
-## Make
+# Make
 alias m "make"
 alias mr "make rebuild"
 alias mc "make clean"
 alias vg "valgrind --leak-check=full --dsymutil=yes"
 
-## Ansible
-alias ap "ansible-playbook"
+# Ansible
 alias ag "ansible-galaxy"
+alias ap "ansible-playbook"
+alias av "ansible-vault"
+
+# Terraform
+alias tf "terraform"
 
 alias q-new "$HOME/viget/devops/q-new/target/debug/q-new"
 
