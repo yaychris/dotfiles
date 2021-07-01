@@ -29,7 +29,6 @@ create-session() {
     tmux split-window -h -t "$name"
 
     tmux send-keys -t "$name:1.1" "cd '$path'; cl" C-m
-    tmux send-keys -t "$name:1.2" "cd '$path'; cl; vim" C-m
 
     tmux select-window -t "$name:1.1"
 
