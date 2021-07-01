@@ -216,6 +216,9 @@ nnoremap <leader>S :SonicPiStop<CR>
 vnoremap <C-S-P> :<C-U>ShadenPatchSelection<CR>
 nnoremap <C-S-P> :<C-U>ShadenPatchLine<CR>
 
+" Search for selected text with //
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+
 
 """
 " Commands
