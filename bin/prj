@@ -9,7 +9,7 @@ error() {
 }
 
 session-exists() {
-  tmux ls -F "#{session_name}" 2> /dev/null | grep -Fx "$1" > /dev/null
+  tmux has-session -t "$1" 2>/dev/null
 }
 
 create-session() {
