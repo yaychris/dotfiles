@@ -192,6 +192,14 @@ nnoremap # #zz
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
+" delete without yanking
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+
+" replace currently selected text with default register
+" without yanking it
+vnoremap <leader>p "_dP
+
 " EasyAlign
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
@@ -237,6 +245,7 @@ augroup filetypes
   autocmd BufRead,BufNewFile {*.tfstate} set filetype=json
   autocmd BufRead,BufNewFile {*.conf.j2} set filetype=nginx.jinja2
   autocmd BufRead,BufNewFile {*.service.j2} set filetype=systemd.jinja2
+  autocmd BufRead,BufNewFile {*.tf} set filetype=terraform
 
   autocmd FileType objc,c,cs setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
   autocmd FileType go setlocal tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab

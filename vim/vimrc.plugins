@@ -43,6 +43,7 @@ Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'fgsch/vim-varnish'
 Plug 'nelsyeung/twig.vim'
 Plug 'chr4/nginx.vim'
+Plug 'jvirtanen/vim-hcl', { 'branch': 'main' }
 
 " vim-orgmode
 Plug 'jceb/vim-orgmode'
