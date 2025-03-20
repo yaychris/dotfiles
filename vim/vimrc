@@ -52,16 +52,38 @@ let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 " ALE
 let g:ale_sign_error = '✗'
 let g:ale_sign_warning = '⚠'
-let g:ale_lint_delay = 2000 " 2 seconds
+" let g:ale_lint_delay = 2000 " 2 seconds
 let g:ale_sh_shellcheck_options = '-x'
 let g:ale_open_list = 1
-let g:ale_list_window_size = 5
+let g:ale_list_window_size = 15
+
+let g:ale_fix_on_save = 1
+
 let g:ale_linters = {
 \   'cpp': ['clang'],
 \   'elixir': [],
+"\   'javascript': ['eslint'],
+"\   'javascriptreact': ['eslint'],
 \   'php': [],
 \   'ruby': [],
+"\   'typescript': ['eslint'],
+"\   'typescriptreact': ['eslint']
 \}
+
+let g:ale_fixers = {
+\   'javascript': ['prettier'],
+\   'javascriptreact': ['prettier'],
+\   'typescript': ['prettier'],
+\   'typescriptreact': ['prettier']
+\}
+
+" fzf
+let g:fzf_vim = {}
+let g:fzf_vim.preview_window = ['up,50%', 'ctrl-/']
+
+" set completeopt=menu,menuone,preview,noselect,noinsert
+let g:ale_completion_enabled = 1
+let g:ale_floating_preview = 1
 
 
 " YouCompleteMe
@@ -69,7 +91,7 @@ let g:ale_linters = {
 let g:ycm_filetype_blacklist = { 'python' : 1 }
 
 " Disable the preview window that appears on autocomplete
-set completeopt-=preview
+" set completeopt-=preview
 
 
 " GitGutter
@@ -123,6 +145,13 @@ colorscheme Tomorrow-Night-Eighties
 
 highlight CursorLineNR ctermfg=cyan
 
+" Better ALE highlighting
+highlight ALEError ctermbg=1 ctermfg=18  cterm=underline
+" highlight ALEWarning ctermbg=3 ctermfg=18
+" highlight ALEInfo ctermbg=4 ctermfg=18
+" highlight ALEStyleError ctermbg=5 ctermfg=18
+" highlight ALEStyleWarning ctermbg=3 ctermfg=18
+
 set autoindent
 set backspace=indent,eol,start
 set backupdir=~/.vim/tmp/backup
@@ -152,10 +181,10 @@ set undofile
 set visualbell
 set wildignore=*.DS_Store,*.dSYM,*.log,*.o,*.ss~
 set wildmode=list:longest
+set backupcopy=yes
 
-" Fix performance problems with Ruby syntax highlighting
-set lazyredraw
-set regexpengine=1
+" " Fix performance problems with Ruby syntax highlighting
+" set lazyredraw
 
 
 """
@@ -182,6 +211,10 @@ nnoremap <C-y> 4<C-y>
 noremap <leader>s :%s//g<LEFT><LEFT>
 vnoremap <leader>s :s//g<LEFT><LEFT>
 
+" Open
+nnoremap <leader>G :OpenGithubFile<CR>
+vnoremap <leader>G :OpenGithubFile<CR>
+
 " Center search results
 nnoremap n nzz
 nnoremap N Nzz
@@ -193,12 +226,19 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
 " delete without yanking
-nnoremap <leader>d "_d
-vnoremap <leader>d "_d
+" nnoremap <leader>d "_d
+" vnoremap <leader>d "_d
 
 " replace currently selected text with default register
 " without yanking it
 vnoremap <leader>p "_dP
+
+" ALE
+nnoremap <leader>d :ALEGoToDefinition<CR>
+nnoremap <leader>r :ALEFindReferences<CR>
+nnoremap <leader>j :ALEHover<CR>
+nnoremap <leader>N :ALEPreviousWrap<CR>
+nnoremap <leader>n :ALENextWrap<CR>
 
 " EasyAlign
 xmap ga <Plug>(EasyAlign)
@@ -207,23 +247,28 @@ nmap ga <Plug>(EasyAlign)
 " Clear search results
 nnoremap <c-l> :noh<CR>
 
-" Convert the current visual selection into a BigDecimal
-" e.g. 1.5 to BigDecimal('1.5')
-vnoremap <leader>d <ESC>`>a')<ESC>`<iBigDecimal('<ESC>
 
-" IQT
-nnoremap <leader>m o"va-vsrv-github.a.internal/it/malinois/"<LEFT>
+" Convert the current visual selection into a Decimal without quotes
+" e.g. 1.5 to new Decimal(1.5)
+vnoremap <leader>T <ESC>`>a)<ESC>`<inew Decimal(<ESC>
+" Convert the current visual selection into a Decimal with quotes
+" e.g. 1.5 to new Decimal('1.5')
+vnoremap <leader>D <ESC>`>a')<ESC>`<inew Decimal('<ESC>
 
-" Go
-nnoremap <leader>r :GoRun %<CR>
+" " Convert the current visual selection into a BigDecimal
+" " e.g. 1.5 to BigDecimal('1.5')
+" vnoremap <leader>d <ESC>`>a')<ESC>`<iBigDecimal('<ESC>
 
-" Sonic Pi
-nnoremap <leader>R :SonicPiSendBuffer<CR>
-nnoremap <leader>S :SonicPiStop<CR>
+" " IQT
+" nnoremap <leader>m o"va-vsrv-github.a.internal/it/malinois/"<LEFT>
 
-" Shaden
-vnoremap <C-S-P> :<C-U>ShadenPatchSelection<CR>
-nnoremap <C-S-P> :<C-U>ShadenPatchLine<CR>
+" " Sonic Pi
+" nnoremap <leader>R :SonicPiSendBuffer<CR>
+" nnoremap <leader>S :SonicPiStop<CR>
+
+" " Shaden
+" vnoremap <C-S-P> :<C-U>ShadenPatchSelection<CR>
+" nnoremap <C-S-P> :<C-U>ShadenPatchLine<CR>
 
 " Search for selected text with //
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>

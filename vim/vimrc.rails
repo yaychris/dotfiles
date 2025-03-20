@@ -1,41 +1,41 @@
-" :Radmin
-function! s:eadminfiles(A,L,P)
-  let files = globpath('app/admin', '**/*.rb')
+" " :Radmin
+" function! s:eadminfiles(A,L,P)
+"   let files = globpath('app/admin', '**/*.rb')
 
-  return substitute(files, 'app/admin/\|.rb', '', 'g')
-endfunction
+"   return substitute(files, 'app/admin/\|.rb', '', 'g')
+" endfunction
 
-function! s:Eadmin(name)
-  execute "e app/admin/".a:name.".rb"
-endfunction
+" function! s:Eadmin(name)
+"   execute "e app/admin/".a:name.".rb"
+" endfunction
 
-command! -nargs=1 -complete=custom,s:eadminfiles Eadmin call s:Eadmin(<f-args>)
+" command! -nargs=1 -complete=custom,s:eadminfiles Eadmin call s:Eadmin(<f-args>)
 
-" :Ecomponent
-function! s:ecomponentfiles(A,L,P)
-  let files = globpath('app/components', '**/*.rb')
+" " :Ecomponent
+" function! s:ecomponentfiles(A,L,P)
+"   let files = globpath('app/components', '**/*.rb')
 
-  return substitute(files, 'app/components/\|.rb', '', 'g')
-endfunction
+"   return substitute(files, 'app/components/\|.rb', '', 'g')
+" endfunction
 
-function! s:Ecomponent(name)
-  execute "e app/components/".a:name.".rb"
-endfunction
+" function! s:Ecomponent(name)
+"   execute "e app/components/".a:name.".rb"
+" endfunction
 
-command! -nargs=1 -complete=custom,s:ecomponentfiles Ecomponent call s:Ecomponent(<f-args>)
+" command! -nargs=1 -complete=custom,s:ecomponentfiles Ecomponent call s:Ecomponent(<f-args>)
 
-" :Esite
-function! s:esitefiles(A,L,P)
-  let files = globpath('app/sites', '**/*.rb')
+" " :Esite
+" function! s:esitefiles(A,L,P)
+"   let files = globpath('app/sites', '**/*.rb')
 
-  return substitute(files, 'app/sites/\|.rb', '', 'g')
-endfunction
+"   return substitute(files, 'app/sites/\|.rb', '', 'g')
+" endfunction
 
-function! s:Esite(name)
-  execute "e app/sites/".a:name.".rb"
-endfunction
+" function! s:Esite(name)
+"   execute "e app/sites/".a:name.".rb"
+" endfunction
 
-command! -nargs=1 -complete=custom,s:esitefiles Esite call s:Esite(<f-args>)
+" command! -nargs=1 -complete=custom,s:esitefiles Esite call s:Esite(<f-args>)
 
 " :Eroutes
 function! s:Eroutes()
