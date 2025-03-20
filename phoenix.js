@@ -99,10 +99,10 @@ var setupHandlers = function(useSizeUpDefaults){
     } else {
         // The alternative keymap allows using the RTFG keys as diagonal directional arrows.
         quarters = [
-            new Key('r', modKeys1, putWindow('topLeft')),
-            new Key('t', modKeys1, putWindow('topRight')),
-            new Key('f', modKeys1, putWindow('bottomLeft')),
-            new Key('g', modKeys1, putWindow('bottomRight')),
+            new Key('p', modKeys1, putWindow('topLeft')),
+            new Key('g', modKeys1, putWindow('topRight')),
+            new Key('t', modKeys1, putWindow('bottomLeft')),
+            new Key('d', modKeys1, putWindow('bottomRight')),
         ]
     }
 
