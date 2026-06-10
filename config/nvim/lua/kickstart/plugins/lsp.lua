@@ -46,6 +46,21 @@ vim.api.nvim_create_autocmd('LspAttach', {
 local servers = {
   stylua = {},
 
+  -- TypeScript / JavaScript
+  ts_ls = {},
+
+  -- ESLint — uses the project's eslint from node_modules, with flat config support.
+  -- workingDirectory mode='auto' walks up from the current file to find the nearest
+  -- eslint.config.js, which is essential for monorepos with per-package configs.
+  eslint = {
+    settings = {
+      workingDirectory = { mode = 'auto' },
+      -- experimental = {
+      --   useFlatConfig = true,
+      -- },
+    },
+  },
+
   lua_ls = {
     on_init = function(client)
       client.server_capabilities.documentFormattingProvider = false
