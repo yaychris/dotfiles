@@ -1,12 +1,16 @@
-{{- if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 # Assign apps to desktops (Spaces) on the main display.
 #
-# macOS stores these bindings against per-machine desktop UUIDs, so this script
-# looks up the UUID of "Desktop N" on this Mac. It runs on every `chezmoi apply`,
-# but only writes (and restarts the Dock) when something differs. If the desktops
-# don't exist yet, create them in Mission Control and run `chezmoi apply` again.
+# Part of new-machine setup (see README); run it by hand after creating the
+# desktops in Mission Control. macOS stores these bindings against per-machine
+# desktop UUIDs, so this looks up the UUID of "Desktop N" on this Mac. Only
+# writes (and restarts the Dock) when something differs, so re-running is safe.
 set -euo pipefail
+
+if [ "$(uname -s)" != "Darwin" ]; then
+  echo "$(basename "$0"): macOS only, skipping" >&2
+  exit 0
+fi
 
 osascript -l JavaScript <<'JS'
 ObjC.import('Foundation');
@@ -34,7 +38,7 @@ const uuids = ((main && main.Spaces) || []).map((s) => s.uuid);
 const needed = Math.max(...Object.values(BINDINGS).filter((v) => v !== 'all'));
 if (uuids.length < needed) {
   console.log(`space-bindings: found ${uuids.length} desktop(s), need ${needed}. ` +
-              'Add desktops in Mission Control, then run `chezmoi apply` again.');
+              'Add desktops in Mission Control, then run this script again.');
 } else {
   const current = ObjC.deepUnwrap(prefs.objectForKey('app-bindings')) || {};
   const changes = [];
@@ -49,4 +53,3 @@ if (uuids.length < needed) {
   }
 }
 JS
-{{ end -}}

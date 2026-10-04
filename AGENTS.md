@@ -28,8 +28,7 @@ blocks Edit/Write on managed targets and gives you the source path.
 4. Commit in this repo. Never commit secrets.
 
 Before starting work, run `chezmoi status`. Any output means `$HOME` has drifted
-from the repo, except the line `R 30-macos-space-bindings.sh`: that script runs on
-every apply by design (it's idempotent and silent when nothing differs). Resolve it first with `chezmoi re-add <target>` (live → repo),
+from the repo. Resolve it first with `chezmoi re-add <target>` (live → repo),
 `chezmoi merge <target>`, or `chezmoi apply <target>` (repo → live, which
 discards the live change). Ask the user which one when it's unclear.
 
@@ -42,6 +41,7 @@ home/                 → mirrors $HOME, using chezmoi naming (below)
   .chezmoiignore      → target paths never managed; OS-conditional ignores
 linked/               → real files that $HOME symlinks to (see below)
 Brewfile             → packages; installed by home/run_onchange_before_10-brew-bundle.sh.tmpl
+setup/               → one-time new-machine scripts, run by hand (never by chezmoi)
 TODO.md              → deferred decisions / follow-ups
 AGENTS.md, README.md  → docs (outside home/, so chezmoi ignores them)
 ```
@@ -56,7 +56,6 @@ AGENTS.md, README.md  → docs (outside home/, so chezmoi ignores them)
 | `foo.tmpl`                    | `foo`, rendered as a Go text/template   |
 | `symlink_foo.tmpl`            | symlink `foo`, target is file contents  |
 | `run_onchange_*.sh[.tmpl]`    | script, re-run when its contents change |
-| `run_after_*.sh[.tmpl]`       | script, run on every apply              |
 
 Prefixes stack: `home/dot_bin/executable_prj` → `~/.bin/prj` (executable).
 Nested dotfiles are renamed too: `home/dot_config/nvim/dot_stylua.toml`.
@@ -108,10 +107,13 @@ OS-specific files are excluded in `home/.chezmoiignore`.
 
 ## macOS settings & packages
 
-- `home/run_onchange_after_20-macos-defaults.sh.tmpl`: `defaults write` settings
-  applied on every Mac. Only add settings the user has explicitly chosen.
-- `home/run_after_30-macos-space-bindings.sh.tmpl`: app → desktop assignments
-  (resolved per machine, since desktop UUIDs differ).
+- `setup/macos-defaults.sh`: `defaults write` settings for every Mac. Only add
+  settings the user has explicitly chosen.
+- `setup/space-bindings.sh`: app → desktop assignments (resolved per machine,
+  since desktop UUIDs differ). Needs the desktops to exist first.
+- Both are **one-time setup scripts that the user runs by hand**. Never turn them
+  into chezmoi `run_*` scripts, and don't run them without asking (they restart
+  Dock/Finder). Both are idempotent, so re-running is safe.
 - `Brewfile` (repo root): installed by `home/run_onchange_before_10-brew-bundle.sh.tmpl`
   with `--no-upgrade`. Nothing is uninstalled automatically.
 

@@ -1,12 +1,16 @@
-{{- if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
-# macOS settings I want on every Mac. chezmoi re-runs this script whenever its
-# contents change. Every command is idempotent. To add or change a setting,
-# edit this file and run `chezmoi apply`.
+# macOS settings I want on every Mac. Part of new-machine setup (see README);
+# run it by hand, it is never run automatically. Every command is idempotent,
+# so re-running it after adding a setting is safe.
 #
-# App -> desktop assignments live in run_after_30-macos-space-bindings.sh.tmpl,
-# because they depend on per-machine desktop IDs.
+# App -> desktop assignments live in setup/space-bindings.sh, which needs the
+# desktops to exist first.
 set -euo pipefail
+
+if [ "$(uname -s)" != "Darwin" ]; then
+  echo "$(basename "$0"): macOS only, skipping" >&2
+  exit 0
+fi
 
 hotkey() { # hotkey <id> <enabled:true|false> <p1> <p2> <p3>
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add "$1" \
@@ -111,4 +115,3 @@ defaults write NSGlobalDomain com.apple.trackpad.scaling -float 1.5
 killall Dock Finder SystemUIServer 2>/dev/null || true
 
 echo "macOS defaults applied. Input source, dark mode, and trackpad changes take full effect after logout."
-{{ end -}}
