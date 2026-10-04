@@ -98,7 +98,7 @@ set PATH $HOME/.dotnet/tools $PATH
 set -x DOTNET_ROOT /opt/homebrew/opt/dotnet/libexec
 
 
-set -x FZF_DEFAULT_COMMAND 'pt --hidden --ignore .git -g ""'
+set -x FZF_DEFAULT_COMMAND 'rg --files --hidden --glob "!.git"'
 
 set -x TERM screen-256color
 

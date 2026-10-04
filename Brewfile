@@ -17,10 +17,9 @@ brew "reattach-to-user-namespace"   # tmux.conf: shell + copy to clipboard
 brew "ripgrep"
 brew "fd"
 
-# nvim support (treesitter parsers, conform formatters)
+# nvim support (treesitter parsers, conform formatter)
 brew "tree-sitter-cli"
 brew "clang-format"
-brew "odinfmt"
 
 # Everyday CLI
 brew "shellcheck"
