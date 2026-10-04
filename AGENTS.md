@@ -40,6 +40,8 @@ home/                 → mirrors $HOME, using chezmoi naming (below)
   .chezmoi.toml.tmpl  → per-machine prompts (kind, name, email, signingkey)
   .chezmoiignore      → target paths never managed; OS-conditional ignores
 linked/               → real files that $HOME symlinks to (see below)
+Brewfile             → packages; installed by home/run_onchange_before_10-brew-bundle.sh.tmpl
+TODO.md              → deferred decisions / follow-ups
 AGENTS.md, README.md  → docs (outside home/, so chezmoi ignores them)
 ```
 

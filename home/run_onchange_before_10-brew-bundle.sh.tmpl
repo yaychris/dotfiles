@@ -1,0 +1,12 @@
+#!/bin/bash
+# Installs packages from the repo's Brewfile. chezmoi re-runs this script
+# whenever its rendered contents change, i.e. whenever the Brewfile changes.
+# Brewfile sha256: {{ include "../Brewfile" | sha256sum }}
+set -euo pipefail
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "brew-bundle: Homebrew not installed, skipping" >&2
+  exit 0
+fi
+
+brew bundle --file={{ joinPath .chezmoi.workingTree "Brewfile" | quote }} --no-upgrade
