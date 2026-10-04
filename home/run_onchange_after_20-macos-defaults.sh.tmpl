@@ -1,0 +1,114 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# macOS settings I want on every Mac. chezmoi re-runs this script whenever its
+# contents change. Every command is idempotent. To add or change a setting,
+# edit this file and run `chezmoi apply`.
+#
+# App -> desktop assignments live in run_after_30-macos-space-bindings.sh.tmpl,
+# because they depend on per-machine desktop IDs.
+set -euo pipefail
+
+hotkey() { # hotkey <id> <enabled:true|false> <p1> <p2> <p3>
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add "$1" \
+    "<dict><key>enabled</key><$2/><key>value</key><dict><key>parameters</key><array><integer>$3</integer><integer>$4</integer><integer>$5</integer></array><key>type</key><string>standard</string></dict></dict>"
+}
+
+input_source() { # input_source <layout id> <layout name>
+  echo "<dict><key>InputSourceKind</key><string>Keyboard Layout</string><key>KeyboardLayout ID</key><integer>$1</integer><key>KeyboardLayout Name</key><string>$2</string></dict>"
+}
+
+input_method() { # input_method <bundle id>
+  echo "<dict><key>Bundle ID</key><string>$1</string><key>InputSourceKind</key><string>Non Keyboard Input Method</string></dict>"
+}
+
+### Keyboard & input ##########################################################
+
+# Colemak (selected), with U.S. kept as a fallback. Takes effect after logout.
+# (PressAndHold is the accent menu shown when holding a key; keep it enabled + selected.)
+defaults write com.apple.HIToolbox AppleEnabledInputSources -array \
+  "$(input_source 0 U.S.)" \
+  "$(input_method com.apple.CharacterPaletteIM)" \
+  "$(input_source 12825 Colemak)" \
+  "$(input_method com.apple.PressAndHold)"
+defaults write com.apple.HIToolbox AppleSelectedInputSources -array \
+  "$(input_method com.apple.PressAndHold)" \
+  "$(input_source 12825 Colemak)"
+defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string com.apple.keylayout.Colemak
+
+# Full keyboard access: Tab moves between all controls
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 2
+
+### Dock & Spaces ##############################################################
+
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock tilesize -int 55
+defaults write com.apple.dock show-recents -bool false
+# Don't automatically rearrange Spaces based on most recent use
+defaults write com.apple.dock mru-spaces -bool false
+
+# Hot corners (2 = Mission Control, 4 = Desktop, 10 = Put Display to Sleep)
+defaults write com.apple.dock wvous-tr-corner -int 2
+defaults write com.apple.dock wvous-tr-modifier -int 0
+defaults write com.apple.dock wvous-bl-corner -int 10
+defaults write com.apple.dock wvous-bl-modifier -int 0
+defaults write com.apple.dock wvous-br-corner -int 4
+defaults write com.apple.dock wvous-br-modifier -int 0
+
+### Keyboard shortcuts #########################################################
+# Parameters: <char code or 65535> <key code> <modifier mask>
+# Modifier masks: ⌃ 262144, ⌥ 524288, ⌘ 1048576
+
+# ⌃1–⌃4: switch to Desktop 1–4
+hotkey 118 true 65535 18 262144
+hotkey 119 true 65535 19 262144
+hotkey 120 true 65535 20 262144
+hotkey 121 true 65535 21 262144
+
+# Free up ⌘Space / ⌥⌘Space (Spotlight, Finder search) for Raycast
+hotkey 64 false 32 49 1048576
+hotkey 65 false 32 49 1572864
+
+# Free up ⌃Space / ⌃⌥Space (input source switching) for Input Source Pro
+hotkey 60 false 32 49 262144
+hotkey 61 false 32 49 786432
+
+### Finder #####################################################################
+
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string icnv
+# New windows open in the home folder
+defaults write com.apple.finder NewWindowTarget -string PfHm
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# Don't write .DS_Store files to network shares or USB drives
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+### Appearance & windows #######################################################
+
+defaults write NSGlobalDomain AppleInterfaceStyle -string Dark
+defaults write NSGlobalDomain AppleShowScrollBars -string Always
+# Double-clicking a title bar doesn't minimize the window
+defaults write NSGlobalDomain AppleMiniaturizeOnDoubleClick -bool false
+
+### Trackpad ###################################################################
+
+# Tap to click (built-in and Bluetooth trackpads, plus the login window)
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float 1.5
+
+### Apply ######################################################################
+
+# Reload keyboard shortcuts without logging out
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u || true
+killall Dock Finder SystemUIServer 2>/dev/null || true
+
+echo "macOS defaults applied. Input source, dark mode, and trackpad changes take full effect after logout."
+{{ end -}}

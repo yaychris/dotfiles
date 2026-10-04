@@ -28,7 +28,8 @@ blocks Edit/Write on managed targets and gives you the source path.
 4. Commit in this repo. Never commit secrets.
 
 Before starting work, run `chezmoi status`. Any output means `$HOME` has drifted
-from the repo. Resolve it first with `chezmoi re-add <target>` (live → repo),
+from the repo, except the line `R 30-macos-space-bindings.sh`: that script runs on
+every apply by design (it's idempotent and silent when nothing differs). Resolve it first with `chezmoi re-add <target>` (live → repo),
 `chezmoi merge <target>`, or `chezmoi apply <target>` (repo → live, which
 discards the live change). Ask the user which one when it's unclear.
 
@@ -55,6 +56,7 @@ AGENTS.md, README.md  → docs (outside home/, so chezmoi ignores them)
 | `foo.tmpl`                    | `foo`, rendered as a Go text/template   |
 | `symlink_foo.tmpl`            | symlink `foo`, target is file contents  |
 | `run_onchange_*.sh[.tmpl]`    | script, re-run when its contents change |
+| `run_after_*.sh[.tmpl]`       | script, run on every apply              |
 
 Prefixes stack: `home/dot_bin/executable_prj` → `~/.bin/prj` (executable).
 Nested dotfiles are renamed too: `home/dot_config/nvim/dot_stylua.toml`.
@@ -103,6 +105,15 @@ OS-specific files are excluded in `home/.chezmoiignore`.
 - `~/.config/fish/secrets.fish`, `~/.config/gh/hosts.yml`, any `*.local`
   file, API tokens, keys.
 - Check `git diff --cached` before every commit.
+
+## macOS settings & packages
+
+- `home/run_onchange_after_20-macos-defaults.sh.tmpl`: `defaults write` settings
+  applied on every Mac. Only add settings the user has explicitly chosen.
+- `home/run_after_30-macos-space-bindings.sh.tmpl`: app → desktop assignments
+  (resolved per machine, since desktop UUIDs differ).
+- `Brewfile` (repo root): installed by `home/run_onchange_before_10-brew-bundle.sh.tmpl`
+  with `--no-upgrade`. Nothing is uninstalled automatically.
 
 ## Not managed (by design)
 
