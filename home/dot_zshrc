@@ -1,0 +1,4 @@
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Machine-local overrides (not tracked)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local

@@ -1,0 +1,18 @@
+# Target paths chezmoi should never manage (see AGENTS.md).
+
+# Runtime/generated files that may exist in the source dir
+.vim/plugged
+.vim/tmp
+.config/nvim/doc/tags
+.config/fish/secrets.fish
+.config/fish/fish_variables
+.config/opencode/node_modules
+.config/opencode/bun.lock
+.config/opencode/package.json
+
+{{- if ne .chezmoi.os "darwin" }}
+
+# macOS-only
+.phoenix.js
+.config/karabiner
+{{- end }}

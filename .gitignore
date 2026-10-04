@@ -1,8 +1,24 @@
-config/fish/fish_history
-config/fish/fishd*
-config/fish/secrets.fish
+# Secrets & machine-local files (never commit)
+**/secrets.fish
+**/hosts.yml
+*.local
 
-config/yarn
+# fish runtime state
+home/dot_config/fish/fish_history
+home/dot_config/fish/fishd*
+home/dot_config/fish/fish_variables
 
-vim/plugged
-vim/tmp
+# vim-plug installs / vim runtime
+home/dot_vim/plugged/
+home/dot_vim/tmp/
+.netrwhist
+
+# nvim generated / tooling
+home/dot_config/nvim/doc/tags
+home/dot_config/nvim/.claude/
+
+# Karabiner writes these itself
+linked/config/karabiner/automatic_backups/
+
+.DS_Store
+.claude/settings.local.json

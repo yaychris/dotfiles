@@ -1,0 +1,12 @@
+{{- /* Prompts are asked once per machine by `chezmoi init`; answers are saved in ~/.config/chezmoi/chezmoi.toml */ -}}
+{{- $kind := promptChoiceOnce . "kind" "Machine type" (list "personal" "work") -}}
+{{- $name := promptStringOnce . "name" "Full name (git)" "Chris Jones" -}}
+{{- $email := promptStringOnce . "email" "Email (git)" -}}
+{{- $signingkey := promptStringOnce . "signingkey" "GPG signing key ID (blank for none)" "" -}}
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
+[data]
+  kind = {{ $kind | quote }}
+  name = {{ $name | quote }}
+  email = {{ $email | quote }}
+  signingkey = {{ $signingkey | quote }}
