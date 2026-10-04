@@ -1,3 +1,3 @@
 return {
-  cwd = '{{CWD}}',
+	cwd = "{{CWD}}",
 }

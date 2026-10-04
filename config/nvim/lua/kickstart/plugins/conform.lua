@@ -34,7 +34,8 @@ require('conform').setup {
     json            = { 'prettier' },
     css             = { 'prettier' },
     lua             = { 'stylua' },
+    odin            = { 'odinfmt' },
+    c               = { 'clang-format' },
+    cpp             = { 'clang-format' },
   },
 }
-
-vim.keymap.set({ 'n', 'v' }, '<leader>f', function() require('conform').format { async = true } end, { desc = '[F]ormat buffer' })

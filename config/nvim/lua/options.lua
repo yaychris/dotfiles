@@ -16,6 +16,9 @@ vim.o.smarttab = true
 -- copy indent from current line when starting a new line
 vim.o.autoindent = true
 
+-- auto-indent after opening a block (e.g. '{')
+vim.o.smartindent = true
+
 -- treat hyphenated-words as a single word
 vim.opt.iskeyword:append '-'
 

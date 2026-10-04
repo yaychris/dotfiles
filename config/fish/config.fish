@@ -1,3 +1,6 @@
+# Init Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 ###
 # Aliases
 alias cl "clear"
@@ -75,18 +78,24 @@ set -x LC_CTYPE en_US.UTF-8
 # set -x GOPATH $HOME/go
 # set -x GOBIN $GOPATH/bin
 
-set PATH $HOME/.phpenv/bin $PATH
+# set PATH $HOME/.phpenv/bin $PATH
+set PATH $HOME/Applications/WezTerm.app/Contents/MacOS $PATH
+set PATH $HOME/.local/bin $PATH
 set PATH /usr/local/bin $PATH
 set PATH /usr/local/sbin $PATH
-set PATH $GOBIN $PATH
+# set PATH $GOBIN $PATH
 set PATH ./bin $PATH
 set PATH $HOME/.bin $PATH
-set PATH $HOME/.cargo/bin $PATH
-set PATH $HOME/Library/Haskell/bin $PATH
+# set PATH $HOME/.cargo/bin $PATH
+# set PATH $HOME/Library/Haskell/bin $PATH
 set PATH $HOME/viget/devops/q/bin $PATH
 set PATH $HOME/bun/bin $PATH
 
 set -x EDITOR /usr/local/bin/vim
+
+# .NET nonsense
+set PATH $HOME/.dotnet/tools $PATH
+set -x DOTNET_ROOT /opt/homebrew/opt/dotnet/libexec
 
 
 set -x FZF_DEFAULT_COMMAND 'pt --hidden --ignore .git -g ""'
@@ -108,9 +117,16 @@ set -x GPG_TTY (tty)
 
 ####
 ## asdf
-if test -e ~/.asdf/asdf.fish
-  source ~/.asdf/asdf.fish
+if test -z $ASDF_DATA_DIR
+    set _asdf_shims "$HOME/.asdf/shims"
+else
+    set _asdf_shims "$ASDF_DATA_DIR/shims"
 end
+
+# if not contains $_asdf_shims $PATH
+  set -gx --prepend PATH $_asdf_shims
+# end
+set --erase _asdf_shims
 
 ####
 # phpenv setup
@@ -119,9 +135,6 @@ end
 ###
 # nodenv setup
 # nodenv init - --no-rehash fish | source
-
-set -x J_COMMAND $GOBIN/jgo
-set -x J_DATA "$HOME/.j"
 
 # source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc
 
@@ -137,3 +150,8 @@ set -x J_DATA "$HOME/.j"
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
+
+# Local secrets (not committed to git)
+if test -f ~/.config/fish/secrets.fish
+    source ~/.config/fish/secrets.fish
+end

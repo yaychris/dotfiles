@@ -22,8 +22,12 @@ function fish_prompt
   end
 
   # Check for current ruby version
-  if [ -e .ruby-version ]
-    set ruby_version (rbenv versions 2> /dev/null | awk '/^\* / { print "(ruby: " $2 ")" }')
+  which rbenv > /dev/null
+
+  if [ $status -eq 0 ]
+    if [ -e .ruby-version ]
+      set ruby_version (rbenv versions 2> /dev/null | awk '/^\* / { print "(ruby: " $2 ")" }')
+    end
   end
 
   set_color cyan

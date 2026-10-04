@@ -1,105 +1,149 @@
-local wezterm = require 'wezterm'
-local init_status_line = require 'status'
-local workspaces = require 'workspaces'
+local wezterm = require("wezterm")
+local init_status_line = require("status")
+local workspaces = require("workspaces")
+-- local util = require("util")
 
 local act = wezterm.action
-local color_scheme = 'Tomorrow Night Eighties'
+local color_scheme = "Tomorrow Night Eighties"
 
 init_status_line(color_scheme)
 
+-- Start from wezterm's built-in copy_mode table and override just the copy
+-- keys, instead of hand-maintaining a full duplicate of the defaults.
+local copy_mode = wezterm.gui.default_key_tables().copy_mode
+table.insert(
+	copy_mode,
+	{ key = "y", mods = "NONE", action = act.Multiple({ act.CopyTo("Clipboard"), act.CopyMode("Close") }) }
+)
+table.insert(
+	copy_mode,
+	{ key = "c", mods = "CMD", action = act.Multiple({ act.CopyTo("Clipboard"), act.CopyMode("Close") }) }
+)
+
+-- Extend the selection to the pane's rightmost column, regardless of each
+-- line's actual content length. Useful in block (Ctrl-v) selection mode when
+-- copying a block of code that starts partway through the line (e.g. past
+-- line numbers), since `$` only reaches each line's own last non-blank cell.
+local move_to_viewport_right = wezterm.action_callback(function(window, pane)
+	local dims = pane:get_dimensions()
+	for _ = 1, dims.cols do
+		window:perform_action(act.CopyMode("MoveRight"), pane)
+	end
+end)
+table.insert(copy_mode, { key = "E", mods = "NONE", action = move_to_viewport_right })
+table.insert(copy_mode, { key = "E", mods = "SHIFT", action = move_to_viewport_right })
+
 return {
-  -- Fish shell
-  default_prog = { '/opt/homebrew/bin/fish' },
+	-- Fish shell
+	default_prog = { "/opt/homebrew/bin/fish" },
 
-  -- Tab settings
-  use_fancy_tab_bar = false,
-  tab_bar_at_bottom = false,
-  tab_max_width = 24,
-  show_tab_index_in_tab_bar = true,
-  show_new_tab_button_in_tab_bar = false,
+	-- Tab settings
+	use_fancy_tab_bar = false,
+	tab_bar_at_bottom = true,
+	tab_max_width = 24,
+	show_tab_index_in_tab_bar = true,
+	show_new_tab_button_in_tab_bar = false,
 
-  -- Update clock time faster
-  status_update_interval = 1000,
+	-- Update clock time faster
+	status_update_interval = 1000,
 
-  -- Appearance
-  color_scheme = color_scheme,
-  colors = {
-    background = '#262626',
-  },
+	-- Appearance
+	color_scheme = color_scheme,
+	colors = {
+		background = "#262626",
+	},
 
-  font = wezterm.font({ family = 'Monaco Nerd Font' }),
-  font_size = 13,
+	inactive_pane_hsb = {
+		-- saturation = 1.0,
+		brightness = 0.65,
+	},
 
-  native_macos_fullscreen_mode = true,
+	font = wezterm.font({ family = "Monaco Nerd Font Mono" }),
+	font_size = 13,
 
-  -- Disable ligatures
-  harfbuzz_features = { 'calt = 0', 'clig = 0', 'liga = 0' },
+	native_macos_fullscreen_mode = true,
 
-  -- Disable macOS chrome
-  window_decorations = 'RESIZE',
+	-- Disable ligatures
+	harfbuzz_features = { "calt = 0", "clig = 0", "liga = 0" },
 
-  leader = {
-    key = 'k',
-    mods = 'CTRL',
-    timeout_milliseconds = 1000,
-  },
+	-- Disable macOS chrome
+	-- window_decorations = "RESIZE",
 
-  keys = {
-    -- Pane creation
-    { key = '|', mods = 'LEADER', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
-    { key = '-', mods = 'LEADER', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
-    { key = 'x', mods = 'LEADER', action = act.CloseCurrentPane { confirm = true } },
+	leader = {
+		key = "k",
+		mods = "CTRL",
+		timeout_milliseconds = 1000,
+	},
 
-    -- Pane movement
-    { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection 'Left' },
-    { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection 'Down' },
-    { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection 'Up' },
-    { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Right' },
+	keys = {
+		-- Pane creation
+		{ key = "|", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = "-", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+		{ key = "x", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
 
-    -- Pane resizing
-    { key = 'H', mods = 'LEADER|SHIFT', action = act.AdjustPaneSize { 'Left', 10 } },
-    { key = 'J', mods = 'LEADER|SHIFT', action = act.AdjustPaneSize { 'Down', 10 } },
-    { key = 'K', mods = 'LEADER|SHIFT', action = act.AdjustPaneSize { 'Up', 10 } },
-    { key = 'L', mods = 'LEADER|SHIFT', action = act.AdjustPaneSize { 'Right', 10 } },
-    { key = 'z', mods = 'LEADER', action = act.TogglePaneZoomState },
+		-- Pane movement
+		{ key = "h", mods = "LEADER", action = act.ActivatePaneDirection("Left") },
+		{ key = "j", mods = "LEADER", action = act.ActivatePaneDirection("Down") },
+		{ key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
+		{ key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
 
-    -- Tab movement
-    { key = 'h', mods = 'LEADER|CTRL', action = act.ActivateTabRelative(-1) },
-    { key = 'l', mods = 'LEADER|CTRL', action = act.ActivateTabRelative(1) },
+		-- Pane resizing
+		{ key = "H", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Left", 5 }) },
+		{ key = "J", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Down", 5 }) },
+		{ key = "K", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Up", 5 }) },
+		{ key = "L", mods = "LEADER|SHIFT", action = act.AdjustPaneSize({ "Right", 5 }) },
+		{ key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
 
-    -- Rename tab
-    { key = ',', mods = 'LEADER', action = act.PromptInputLine {
-      description = 'Enter new tab name',
-      action = wezterm.action_callback(function(window, _, line)
-        if line then
-          window:active_tab():set_title(line)
-        end
-      end),
-    }},
+		-- Tab movement
+		{ key = "h", mods = "LEADER|CTRL", action = act.ActivateTabRelative(-1) },
+		{ key = "l", mods = "LEADER|CTRL", action = act.ActivateTabRelative(1) },
 
-    -- Full screen
-    { key = 'f', mods = 'LEADER', action = act.ToggleFullScreen },
+		-- Rename tab
+		{
+			key = ",",
+			mods = "LEADER",
+			action = act.PromptInputLine({
+				description = "Enter new tab name",
+				action = wezterm.action_callback(function(window, _, line)
+					if line then
+						window:active_tab():set_title(line)
+					end
+				end),
+			}),
+		},
 
-    -- Copy Mode
-    { key = 'Escape', mods = 'LEADER', action = act.ActivateCopyMode },
+		-- Full screen
+		{ key = "f", mods = "LEADER", action = act.ToggleFullScreen },
 
-    -- Scroll to prompt
-    { key = 'u', mods = 'LEADER', action = act.ScrollToPrompt(-1) },
-    { key = 'd', mods = 'LEADER', action = act.ScrollToPrompt(1) },
+		-- Copy Mode
+		{ key = "Escape", mods = "LEADER", action = act.ActivateCopyMode },
+		{ key = "[", mods = "LEADER|CTRL", action = act.ActivateCopyMode },
 
-    -- Workspace management
-    { key = 's', mods = 'LEADER', action = workspaces.selector_action() },
-    { key = 'S', mods = 'LEADER', action = act.SwitchToWorkspace },
-    { key = '$', mods = 'LEADER', action = act.PromptInputLine {
-      description = 'Rename workspace:',
-      action = wezterm.action_callback(function(window, pane, line)
-        if line and #line > 0 then
-          wezterm.mux.rename_workspace(wezterm.mux.get_active_workspace(), line)
-        end
-      end),
-    }},
+		-- Scroll to prompt
+		{ key = "u", mods = "LEADER", action = act.ScrollToPrompt(-1) },
+		{ key = "d", mods = "LEADER", action = act.ScrollToPrompt(1) },
 
-    -- Custom workspace management via workspace files
-    { key = 'W', mods = 'LEADER', action = workspaces.create_action() },
-  },
+		-- Workspace management
+		{ key = "s", mods = "LEADER", action = workspaces.selector_action() },
+		{ key = "S", mods = "LEADER", action = act.SwitchToWorkspace },
+		{
+			key = "$",
+			mods = "LEADER",
+			action = act.PromptInputLine({
+				description = "Rename workspace:",
+				action = wezterm.action_callback(function(window, pane, line)
+					if line and #line > 0 then
+						wezterm.mux.rename_workspace(wezterm.mux.get_active_workspace(), line)
+					end
+				end),
+			}),
+		},
+
+		-- Custom workspace management via workspace files
+		{ key = "W", mods = "LEADER", action = workspaces.create_action() },
+	},
+
+	key_tables = {
+		copy_mode = copy_mode,
+	},
 }

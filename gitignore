@@ -4,3 +4,5 @@
 .rbenv-gemsets
 .ptconfig.toml
 scratch.go
+
+**/.claude/settings.local.json

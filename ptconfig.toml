@@ -1,3 +1,4 @@
 before = 2
 after = 2
 hidden = true
+ignore = ["coverage", "node_modules"]

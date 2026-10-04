@@ -1,13 +1,14 @@
 [core]
   excludesfile = /Users/chris/.gitignore
-  pager = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
-  editor = /usr/local/bin/vim
+  pager = /opt/homebrew/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
+  editor = /opt/homebrew/bin/vim
 [user]
   email = chris.jones@viget.com
   name = Chris Jones
   signingkey = 4DD597B7D6BF5E57
 [push]
-  default = tracking
+  default = simple
+	autoSetupRemote = true
 [color]
   ui = always
 [color "diff"]
@@ -38,3 +39,5 @@
 	conflictstyle = diff3
 [init]
 	defaultBranch = main
+[branch]
+	autoSetupMerge = simple

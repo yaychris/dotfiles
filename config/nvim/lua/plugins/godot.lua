@@ -11,6 +11,10 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
     vim.bo.softtabstop = 2
+    -- Treesitter's indent query doesn't handle incomplete trees well (typing a
+    -- new line inside an open block). This wrapper uses treesitter when it can
+    -- (great for `=` re-indent) and falls back to a prev-line heuristic for Enter.
+    vim.bo.indentexpr = "v:lua.require('util').colon_indent()"
   end,
 })
 

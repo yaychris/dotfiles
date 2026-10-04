@@ -1,5 +1,17 @@
+-- clear search highlighting
+vim.keymap.set('n', '<C-l>', '<cmd>noh<CR>', { desc = 'Clear search highlighting' })
+
 -- toggle display of invisible characters
 vim.keymap.set('n', '<leader>i', '<cmd>set list!<CR>', { desc = 'Toggle [I]nvisible characters' })
+
+-- toggle between relative and absolute line numbers
+vim.keymap.set('n', '<leader>n', '<cmd>set relativenumber!<CR>', { desc = 'Toggle relative line [N]umbers' })
+
+-- toggle LSP diagnostics for the current buffer
+vim.keymap.set('n', '<leader>td', function()
+  local enabled = vim.diagnostic.is_enabled { bufnr = 0 }
+  vim.diagnostic.enable(not enabled, { bufnr = 0 })
+end, { desc = '[T]oggle [D]iagnostics' })
 
 -- open file browser in the directory of the current file
 vim.keymap.set('n', '<leader>g', ':e %:.:h/', { desc = 'Browse current file directory' })
@@ -12,8 +24,10 @@ vim.keymap.set('n', '<C-e>', '4<C-e>', { desc = 'Scroll down faster' })
 vim.keymap.set('n', '<C-y>', '4<C-y>', { desc = 'Scroll up faster' })
 
 -- search and replace in entire file
-vim.keymap.set('n', '<leader>S', ':%s//g<LEFT><LEFT>', { desc = '[S]earch and replace in file' })
-vim.keymap.set('v', '<leader>S', ':s//g<LEFT><LEFT>', { desc = '[S]earch and replace in selection' })
+-- `:keeppatterns` stops :substitute from overwriting the last search pattern,
+-- which is what was triggering the persistent hlsearch highlight afterward.
+vim.keymap.set('n', '<leader>S', ':keeppatterns %s//g<LEFT><LEFT>', { desc = '[S]earch and replace in file' })
+vim.keymap.set('v', '<leader>S', ':keeppatterns s//g<LEFT><LEFT>', { desc = '[S]earch and replace in selection' })
 
 -- jump to next diff conflict marker
 vim.keymap.set('n', '<leader>e', '/<<<<<<<\\|=======\\|\\|\\|\\|\\|\\|\\|\\|>>>>>>><CR>', { desc = 'Jump to next conflict marker' })
@@ -41,4 +55,12 @@ vim.api.nvim_create_user_command('StripWhitespace', '%s/\\s\\+$//e | noh', {})
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'markdown',
   callback = function() vim.o.linebreak = true end,
+})
+
+-- HavokScript (.hks) — treat as Lua for highlighting, disable diagnostics
+-- since these are decompiled files with missing dependencies
+vim.filetype.add { extension = { hks = 'lua' } }
+vim.api.nvim_create_autocmd('BufRead', {
+  pattern = '*.hks',
+  callback = function() vim.diagnostic.enable(false, { bufnr = 0 }) end,
 })

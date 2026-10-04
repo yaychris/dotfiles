@@ -71,11 +71,34 @@ let g:ale_linters = {
 \}
 
 let g:ale_fixers = {
-\   'javascript': ['prettier'],
-\   'javascriptreact': ['prettier'],
-\   'typescript': ['prettier'],
-\   'typescriptreact': ['prettier']
+\   'javascript': ['eslint', 'prettier'],
+\   'javascriptreact': ['eslint', 'prettier'],
+\   'typescript': ['eslint', 'prettier'],
+\   'typescriptreact': ['eslint', 'prettier']
 \}
+
+"""
+" Fix issue where eslint and prettier don't use the right config with
+" workspaces in a monorepo
+"
+" https://github.com/dense-analysis/ale/issues/4487#issuecomment-1772044826
+augroup TypeScriptOverrides
+    autocmd!
+    autocmd BufRead,BufNewFile *.ts,*.tsx,*.js,*.json call s:DefineEslintFunction()
+augroup END
+
+function! s:DefineEslintFunction()
+  function! ale#handlers#eslint#GetCwd(buffer) abort
+      " Obtain the path to the ESLint configuration
+      let l:config_path = ale#handlers#eslint#FindConfig(a:buffer)
+  
+      " Extract the directory from the config path
+      let l:config_dir = fnamemodify(l:config_path, ':h')
+  
+      " Return the directory as the cwd
+      return l:config_dir
+  endfunction
+endfunction
 
 " fzf
 let g:fzf_vim = {}
@@ -169,7 +192,7 @@ set laststatus=2
 set listchars=tab:▸\ ,eol:¬
 set number
 set scrolloff=3
-set shell=/bin/bash
+set shell=/opt/homebrew/bin/fish
 set shiftwidth=2
 set showcmd
 set showmode
@@ -211,6 +234,9 @@ nnoremap <C-y> 4<C-y>
 noremap <leader>s :%s//g<LEFT><LEFT>
 vnoremap <leader>s :s//g<LEFT><LEFT>
 
+" Find diff markers
+nnoremap <leader>e /<<<<<<<\\|=======\\|\|\|\|\|\|\|\|\\|>>>>>>><CR>
+
 " Open
 nnoremap <leader>G :OpenGithubFile<CR>
 vnoremap <leader>G :OpenGithubFile<CR>
@@ -236,9 +262,11 @@ vnoremap <leader>p "_dP
 " ALE
 nnoremap <leader>d :ALEGoToDefinition<CR>
 nnoremap <leader>r :ALEFindReferences<CR>
+nnoremap <leader>T :ALEGoToTypeDefinition<CR>
+nnoremap <leader>I :ALEGoToImplementation<CR>
 nnoremap <leader>j :ALEHover<CR>
-nnoremap <leader>N :ALEPreviousWrap<CR>
-nnoremap <leader>n :ALENextWrap<CR>
+nnoremap <leader>N :ALEPreviousWrap<CR>zz
+nnoremap <leader>n :ALENextWrap<CR>zz
 
 " EasyAlign
 xmap ga <Plug>(EasyAlign)
