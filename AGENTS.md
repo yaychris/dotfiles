@@ -16,6 +16,10 @@ chezmoi source-path ~/.config/fish/config.fish
 If that command errors with "not managed", the file is not in the repo (see
 "Adding a new file" below, or "Symlinked paths").
 
+A Claude Code PreToolUse hook (`~/.claude/hooks/chezmoi-guard.sh`, source
+`home/dot_claude/hooks/executable_chezmoi-guard.sh`) enforces this rule: it
+blocks Edit/Write on managed targets and gives you the source path.
+
 ## Workflow
 
 1. Edit the source file under `home/` (or `linked/`, see below).
